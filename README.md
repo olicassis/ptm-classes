@@ -1,2 +1,2 @@
 # ptm-classes
-Repository created to learning about some concepts and technologies. 
+Repository created to learn about some concepts and technologies. 
