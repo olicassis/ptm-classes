@@ -5,8 +5,7 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "lint:fix": "turbo lint:fix", 
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "lint:fix": "turbo lint:fix"
   },
   "devDependencies": {
     "prettier": "3.3.2",
