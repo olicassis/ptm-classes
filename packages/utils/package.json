@@ -1,0 +1,22 @@
+{
+  "name": "@ptm/utils",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "lint": "eslint 'src/**/*.{js,ts,tsx}'",
+    "lint:fix": "eslint 'src/**/*.{js,ts,tsx}' --fix"
+  },
+  "exports": {
+    "./date": {
+      "types": "./src/date.ts",
+      "default": "./dist/date.ts"
+    }
+  },
+  "devDependencies": {
+    "typescript": "5.5.2"
+  },
+  "dependencies": {
+    "date-fns": "3.6.0"
+  }
+}
