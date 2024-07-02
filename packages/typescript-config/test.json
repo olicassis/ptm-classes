@@ -1,0 +1,9 @@
+{
+  "extends": "./base.json",
+  "compilerOptions": {
+    "outDir": "./dist-tests",
+    "rootDir": "./tests",
+    "types": ["jest"]
+  },
+  "include": ["tests/**/*.test.ts"]
+}

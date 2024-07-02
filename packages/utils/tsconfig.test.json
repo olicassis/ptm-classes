@@ -1,0 +1,8 @@
+{
+  "extends": "@ptm/typescript-config/test.json",
+  "compilerOptions": {
+    "outDir": "dist-tests",
+    "rootDir": "tests"
+  },
+  "include": ["tests/**/*.test.ts"]
+}

@@ -5,12 +5,8 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "lint:fix": "turbo lint:fix"
-  },
-  "devDependencies": {
-    "prettier": "3.3.2",
-    "turbo": "2.0.6",
-    "typescript": "5.5.2"
+    "lint:fix": "turbo lint:fix",
+    "test": "turbo test"
   },
   "engines": {
     "node": ">=20"

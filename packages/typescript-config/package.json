@@ -1,5 +1,8 @@
 {
   "name": "@ptm/typescript-config",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "typescript": "5.5.3"
+  }
 }
