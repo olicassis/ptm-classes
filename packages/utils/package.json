@@ -6,7 +6,16 @@
     "build": "tsc",
     "lint": "eslint '{src,tests}/**/*.{js,ts,tsx}'",
     "lint:fix": "eslint '{src,tests}/**/*.{js,ts,tsx}' --fix",
+    "lint-staged": "lint-staged",
     "test": "jest"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint '{src,tests}/**/*.{js,ts,tsx}' --fix"
+    ],
+    "*.json": [
+      "prettier --write"
+    ]
   },
   "exports": {
     "./date": {
