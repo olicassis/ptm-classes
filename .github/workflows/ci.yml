@@ -24,8 +24,6 @@ jobs:
 
       - name: Run tests
         run: npm test
-        env:
-          CI: true
 
       - name: Report status
         if: failure()
