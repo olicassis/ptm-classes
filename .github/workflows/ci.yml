@@ -24,3 +24,8 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+      - name: Report status
+        if: failure()
+        run: echo "Tests failed"
+        continue-on-error: true
