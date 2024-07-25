@@ -27,7 +27,7 @@ export class ProfileEntity {
   username: string
   @Column({ name: 'role', type: 'varchar' })
   role: ProfileRole
-  @Column({ name: 'status', type: 'date' })
+  @Column({ name: 'status', type: 'varchar' })
   status: ProfileStatus = ProfileStatus.UNVERIFIED
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt?: Date
