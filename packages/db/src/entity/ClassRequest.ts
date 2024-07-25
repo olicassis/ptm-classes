@@ -24,8 +24,8 @@ export class ClassRequestEntity {
   studentProfileId: string
   @Column({ name: 'teacher_profile_id', type: 'uuid', nullable: false })
   teacherProfileId: string
-  @Column({ name: 'schedule_profile_id', type: 'uuid', nullable: false })
-  scheduleProfileId: string
+  @Column({ name: 'profile_schedule_id', type: 'uuid', nullable: false })
+  profileScheduleId: string
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt?: Date
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
