@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "nodemon src/app.ts",
     "build": "tsc",
+    "start": "node dist/app.js",
     "lint": "eslint '{src,tests}/**/*.{js,ts,tsx}'",
     "lint:fix": "eslint '{src,tests}/**/*.{js,ts,tsx}' --fix",
     "lint-staged": "lint-staged"
