@@ -1,0 +1,9 @@
+{
+  "extends": "@ptm/typescript-config/base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src", "src/app.ts"],
+  "exclude": ["node_modules", "dist"]
+}
