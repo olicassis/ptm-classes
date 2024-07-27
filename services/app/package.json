@@ -20,6 +20,7 @@
     "@ptm/typescript-config": "*",
     "@types/express": "^4.17.21",
     "@types/node": "^20.14.12",
+    "concurrently": "^8.2.2",
     "nodemon": "^3.1.4",
     "ts-node": "^10.9.2"
   },
