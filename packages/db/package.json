@@ -1,0 +1,36 @@
+{
+  "name": "@ptm/db",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "lint": "eslint '{src,tests}/**/*.{js,ts,tsx}'",
+    "lint:fix": "eslint '{src,tests}/**/*.{js,ts,tsx}' --fix",
+    "lint-staged": "lint-staged",
+    "migration:create": "typeorm migration:create",
+    "migrations": "typeorm migration:run -d ./dist/dataSource.js",
+    "migrations:revert": "typeorm migration:revert -d ./dist/dataSource.js",
+    "seed": "ts-node src/seeds.ts"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint '{src,tests}/**/*.{js,ts,tsx}' --fix"
+    ],
+    "*.json": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@ptm/enums": "*",
+    "@ptm/typescript-config": "*",
+    "@types/node": "^20.14.11"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "@ptm/envs": "*",
+    "dotenv": "^16.4.5",
+    "pg": "^8.12.0",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.20",
+    "typeorm-extension": "^3.6.0"
+  }
+}

@@ -12,8 +12,5 @@
     "*.json": [
       "prettier --write"
     ]
-  },
-  "dependencies": {
-    "typescript": "5.5.3"
   }
 }
