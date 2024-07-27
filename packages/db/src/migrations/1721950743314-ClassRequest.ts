@@ -11,17 +11,24 @@ export class ClassRequest1721950743314 implements MigrationInterface {
     const table = new Table({
       name: 'class_request',
       columns: [
-        { name: 'id', type: 'uuid', isGenerated: true, isPrimary: true },
-        { name: 'student_profile_id', type: 'uuid', isNullable: false },
-        { name: 'teacher_profile_id', type: 'uuid', isNullable: false },
-        { name: 'profile_schedule_id', type: 'uuid', isNullable: false },
+        {
+          name: 'id',
+          type: 'uuid',
+          isGenerated: true,
+          generationStrategy: 'uuid',
+          default: 'uuid_generate_v4()',
+          isPrimary: true,
+        },
+        { name: 'student_profile_id', type: 'uuid' },
+        { name: 'teacher_profile_id', type: 'uuid' },
+        { name: 'profile_schedule_id', type: 'uuid' },
         { name: 'created_at', type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
         {
           name: 'updated_at',
           type: 'timestamp',
           default: 'CURRENT_TIMESTAMP',
         },
-        { name: 'deleted_at', type: 'timestamp' },
+        { name: 'deleted_at', type: 'timestamp', isNullable: true },
       ],
     })
 

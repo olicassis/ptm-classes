@@ -10,16 +10,23 @@ export class ProfileSubject1721947834854 implements MigrationInterface {
     const table = new Table({
       name: 'profile_subject',
       columns: [
-        { name: 'id', type: 'uuid', isGenerated: true, isPrimary: true },
-        { name: 'profile_id', type: 'uuid', isNullable: false },
-        { name: 'label', type: 'varchar', isNullable: false },
+        {
+          name: 'id',
+          type: 'uuid',
+          isGenerated: true,
+          generationStrategy: 'uuid',
+          default: 'uuid_generate_v4()',
+          isPrimary: true,
+        },
+        { name: 'profile_id', type: 'uuid' },
+        { name: 'label', type: 'varchar' },
         { name: 'created_at', type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
         {
           name: 'updated_at',
           type: 'timestamp',
           default: 'CURRENT_TIMESTAMP',
         },
-        { name: 'deleted_at', type: 'timestamp' },
+        { name: 'deleted_at', type: 'timestamp', isNullable: true },
       ],
     })
 

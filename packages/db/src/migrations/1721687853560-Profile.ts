@@ -5,17 +5,23 @@ export class Profile1721687853560 implements MigrationInterface {
     const table = new Table({
       name: 'profile',
       columns: [
-        { name: 'id', type: 'uuid', isGenerated: true, isPrimary: true },
-        { name: 'first_name', type: 'varchar', isNullable: false },
-        { name: 'last_name', type: 'varchar', isNullable: false },
-        { name: 'avatar', type: 'varchar', isNullable: false, isUnique: true },
+        {
+          name: 'id',
+          type: 'uuid',
+          isGenerated: true,
+          generationStrategy: 'uuid',
+          default: 'uuid_generate_v4()',
+          isPrimary: true,
+        },
+        { name: 'first_name', type: 'varchar' },
+        { name: 'last_name', type: 'varchar' },
+        { name: 'avatar', type: 'varchar', isNullable: true, isUnique: true },
         {
           name: 'username',
           type: 'varchar',
-          isNullable: false,
           isUnique: true,
         },
-        { name: 'role', type: 'varchar' },
+        { name: 'role', type: 'varchar', isNullable: true },
         { name: 'status', type: 'varchar' },
         { name: 'created_at', type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
         {
@@ -23,7 +29,7 @@ export class Profile1721687853560 implements MigrationInterface {
           type: 'timestamp',
           default: 'CURRENT_TIMESTAMP',
         },
-        { name: 'deleted_at', type: 'timestamp' },
+        { name: 'deleted_at', type: 'timestamp', isNullable: true },
       ],
     })
     await queryRunner.createTable(table, true)

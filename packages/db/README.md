@@ -3,11 +3,25 @@
 ## To create a migration:
 
 ```
-typeorm migration:create ./migrations/<migration_name>
+npm run migration:create src/migrations/<migration_name>
 ```
 
 Example:
 
 ```
-typeorm migration:create ./migrations/Profile
+npm run migration:create src/migrations/Profile
+```
+
+## To run all migrations
+
+
+```
+npm run migrations
+```
+
+## To revert last migration
+
+
+```
+npm run migrations:revert
 ```

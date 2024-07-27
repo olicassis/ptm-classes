@@ -17,15 +17,15 @@ import { ProfileSubjectEntity } from './ProfileSubject'
 export class ProfileEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
-  @Column({ name: 'first_name', type: 'varchar', nullable: false })
+  @Column({ name: 'first_name', type: 'varchar' })
   firstName: string
-  @Column({ name: 'last_name', type: 'varchar', nullable: false })
+  @Column({ name: 'last_name', type: 'varchar' })
   lastName: string
-  @Column({ name: 'avatar', type: 'varchar', unique: true, nullable: false })
+  @Column({ name: 'avatar', type: 'varchar', unique: true, nullable: true })
   avatar: string
-  @Column({ name: 'username', type: 'varchar', unique: true, nullable: false })
+  @Column({ name: 'username', type: 'varchar', unique: true })
   username: string
-  @Column({ name: 'role', type: 'varchar' })
+  @Column({ name: 'role', type: 'varchar', nullable: true })
   role: ProfileRole
   @Column({ name: 'status', type: 'varchar' })
   status: ProfileStatus = ProfileStatus.UNVERIFIED
@@ -33,7 +33,7 @@ export class ProfileEntity {
   createdAt?: Date
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
   updatedAt?: Date
-  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp' })
+  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp', nullable: true })
   deletedAt?: Date
 
   @OneToMany(

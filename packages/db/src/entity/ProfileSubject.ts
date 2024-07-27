@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   Relation,
@@ -15,17 +16,18 @@ import { ProfileEntity } from './Profile'
 export class ProfileSubjectEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
-  @Column({ name: 'profile_id', type: 'uuid', nullable: false })
+  @Column({ name: 'profile_id', type: 'uuid' })
   profileId: string
-  @Column({ name: 'label', type: 'varchar', nullable: false })
+  @Column({ name: 'label', type: 'varchar' })
   label: string
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt?: Date
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
   updatedAt?: Date
-  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp' })
+  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp', nullable: true })
   deletedAt?: Date
 
   @ManyToOne(() => ProfileEntity, (profile) => profile.profileSubject)
+  @JoinColumn({ name: 'profile_id' })
   profile: Relation<ProfileEntity>
 }
