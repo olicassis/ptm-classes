@@ -20,6 +20,21 @@ services:
     restart: unless-stopped
     command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+    volumes:
+      - ./data:/src/data
+      - ./logs:/src/logs
+    restart: unless-stopped
+
 volumes:
   data:
     driver: local
