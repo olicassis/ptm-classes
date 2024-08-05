@@ -35,4 +35,8 @@ RUN npm install
 # Expose port 3000
 EXPOSE 3000
 
+# Add a basic health check
+HEALTHCHECK --interval=1m --timeout=30s --start-period=10s \
+    CMD curl --fail http://localhost:3000/api/healthcheck || exit 1
+
 CMD ["npm", "start"]
