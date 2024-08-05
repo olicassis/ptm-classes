@@ -1,0 +1,41 @@
+# Ignore node_modules at any level
+../**/node_modules
+
+# Ignore Turbo cache at any level
+../**/.turbo
+
+# Ignore lock files and environment variables at any level
+../**/package-lock.json
+../**/.env
+
+# Ignore logs at any level
+../**/npm-debug.log
+
+# Ignore temporary files at any level
+../**/dist
+../**/build
+../**/.tmp
+../**/.cache
+../**/tmp
+
+# Ignore test files and coverage at any level
+../**/coverage
+../**/test-results
+../**/__tests__
+../**/*.spec.ts
+../**/*.spec.js
+../**/*.test.ts
+../**/*.test.js
+
+# Ignore IDE and editor files at any level
+../**/.idea
+../**/.vscode
+../**/*.swp
+
+# Ignore Docker files in the current directory
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Ignore README and other documentation files at any level
+../**/README.md

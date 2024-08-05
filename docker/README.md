@@ -29,5 +29,5 @@ $ chmod -R 755 ./data ./logs
 ```
 
 ```
-$ docker-compose -f docker-compose.yml up
+$ docker-compose --env-file ../.env -f docker-compose.yml up
 ```

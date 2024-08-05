@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       POSTGRES_DATABASE: ${POSTGRES_DATABASE:-ptm_classes}
       PG_DATA: /var/lib/postgresql/data
-    volumes: 
+    volumes:
       - ./data:/var/lib/postgresql/data
       - ./logs:/var/log/postgresql
       - ./postgresql.conf:/etc/postgresql/postgresql.conf
@@ -24,12 +24,13 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    depends_on:
-      - db
     ports:
-      - "3000:3000"
-    environment:
-      NODE_ENV: ${NODE_ENV:-development}
+      - "${APP_PORT:-3000}:${APP_PORT:-3000}"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "${APP_URL}:${APP_PORT}/api/healthcheck"]
+      interval: 1m
+      timeout: 30s
+      retries: 3
     volumes:
       - ./data:/src/data
       - ./logs:/src/logs
