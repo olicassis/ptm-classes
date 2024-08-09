@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import swaggerAutogen from 'swagger-autogen'
 
-dotenv.config({ path: '../../.env' })
+dotenv.config()
 
 const doc = {
   info: {
@@ -11,13 +11,13 @@ const doc = {
   },
   servers: [
     {
-      url: `${process.env.APP_URL}:${process.env.APP_PORT}`,
+      url: `${process.env.APP_URL}:${process.env.APP_PORT}/api`,
       description: 'PTM Classes Server',
     },
   ],
 }
 
 const outputFile = './swagger_output.json'
-const endpointsFiles = ['./src/routes/healthcheck.ts']
+const endpointsFiles = ['./routes/healthcheck.ts']
 
 swaggerAutogen({ openapi: '3.0.0' })(outputFile, endpointsFiles, doc)

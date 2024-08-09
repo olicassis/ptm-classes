@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker'
-import { ProfileRole, ProfileStatus } from '@ptm/enums/src/enums/profile'
 import { DataSource } from 'typeorm'
 import { Seeder, SeederFactoryManager } from 'typeorm-extension'
 
+import { ProfileRole, ProfileStatus } from '../../../enums/profile'
 import { ClassRequestEntity } from '../../entity/ClassRequest'
 import { ProfileEntity } from '../../entity/Profile'
 import { ProfileScheduleEntity } from '../../entity/ProfileSchedule'

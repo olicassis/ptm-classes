@@ -1,4 +1,3 @@
-import { ProfileScheduleStatus } from '@ptm/enums/src/enums/profile'
 import {
   Column,
   CreateDateColumn,
@@ -11,6 +10,8 @@ import {
   Relation,
   UpdateDateColumn,
 } from 'typeorm'
+
+import { ProfileScheduleStatus } from '../../enums/profile'
 
 import { ClassRequestEntity } from './ClassRequest'
 import { ProfileEntity } from './Profile'

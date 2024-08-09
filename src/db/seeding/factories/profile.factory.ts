@@ -1,7 +1,7 @@
 import { Faker } from '@faker-js/faker'
-import { ProfileRole, ProfileStatus } from '@ptm/enums/src/enums/profile'
 import { setSeederFactory } from 'typeorm-extension'
 
+import { ProfileRole, ProfileStatus } from '../../../enums/profile'
 import { ProfileEntity } from '../../entity/Profile'
 
 export const ProfileFactory = setSeederFactory(

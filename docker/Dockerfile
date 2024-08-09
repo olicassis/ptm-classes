@@ -1,33 +1,15 @@
-FROM node:20
+FROM node:20-alpine
 
-# Set the main working directory
+RUN apk add --no-cache curl
+
 WORKDIR /src
 
-# Copy root-level files from the parent directory of 'docker'
-COPY ../package*.json ./
-COPY ../turbo.json ./
-COPY ../.env ./
+COPY ./package*.json ./
 
-# Copy the packages and services directories while maintaining the directory structure
-COPY ../packages/typescript-config packages/typescript-config
-COPY ../packages/enum packages/enum
-COPY ../packages/db packages/db
-COPY ../services/app services/app
-
-# Install root-level dependencies
 RUN npm install
 
-# Install dependencies for each package
-WORKDIR /src/packages/typescript-config
-RUN npm install
+COPY . .
 
-WORKDIR /src/packages/enum
-RUN npm install
-
-WORKDIR /src/packages/db 
-RUN npm install
-
-WORKDIR /src/services/app
-RUN npm install
+RUN npm run build
 
 CMD ["npm", "start"]

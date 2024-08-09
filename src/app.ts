@@ -6,7 +6,7 @@ import swaggerUi from 'swagger-ui-express'
 import routes from './routes'
 import swaggerOutput from './swagger_output.json'
 
-dotenv.config({ path: '../../.env' })
+dotenv.config()
 
 const port = parseInt(process.env.APP_PORT ?? '3000')
 const url = process.env.APP_URL

@@ -11,7 +11,7 @@ import { ProfileFactory } from './seeding/factories/profile.factory'
 import { ProfileScheduleFactory } from './seeding/factories/profileSchedule.factory'
 import { ProfileSubjectFactory } from './seeding/factories/profileSubject.factory'
 import { MainSeeder } from './seeding/seeds/initialSeed'
-dotenv.config({ path: '../../.env' })
+dotenv.config()
 
 const options: DataSourceOptions & SeederOptions = {
   type: 'postgres',

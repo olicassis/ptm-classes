@@ -1,4 +1,3 @@
-import { ProfileRole, ProfileStatus } from '@ptm/enums/src/enums/profile'
 import {
   Column,
   CreateDateColumn,
@@ -9,6 +8,8 @@ import {
   Relation,
   UpdateDateColumn,
 } from 'typeorm'
+
+import { ProfileRole, ProfileStatus } from '../../enums/profile'
 
 import { ProfileScheduleEntity } from './ProfileSchedule'
 import { ProfileSubjectEntity } from './ProfileSubject'
