@@ -8,8 +8,6 @@ import swaggerOutput from './swagger_output.json'
 
 dotenv.config()
 
-const port = parseInt(process.env.APP_PORT ?? '3000')
-const url = process.env.APP_URL
 const app: Application = express()
 
 app.use(bodyParser.json())
@@ -18,6 +16,4 @@ app.use('/api', routes)
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput))
 
-app.listen(port, () => {
-  console.info(`[server]: Server is running at ${url}:${port}`)
-})
+export default app
