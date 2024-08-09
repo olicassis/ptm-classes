@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       POSTGRES_DATABASE: ${POSTGRES_DATABASE:-ptm_classes}
       PG_DATA: /var/lib/postgresql/data
-    volumes: 
+    volumes:
       - ./data:/var/lib/postgresql/data
       - ./logs:/var/log/postgresql
       - ./postgresql.conf:/etc/postgresql/postgresql.conf
@@ -17,8 +17,29 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
+    expose:
+      - 5432
     restart: unless-stopped
     command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+
+  app:
+    container_name: ptm_classes
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    depends_on:
+      - db
+    ports:
+      - "${APP_PORT:-3000}:${APP_PORT:-3000}"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "${APP_URL}:${APP_PORT}/api/healthcheck"]
+      interval: 1m
+      timeout: 30s
+      retries: 3
+    volumes:
+      - ./data:/src/data
+      - ./logs:/src/logs
+    restart: unless-stopped
 
 volumes:
   data:
