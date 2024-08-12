@@ -1,5 +1,6 @@
-import { default as Healthcheckroutes } from './healthcheck'
+import { default as HealthcheckRoutes } from './healthcheck'
+import { default as ProfileRoutes } from './profile'
 
-const routes = [Healthcheckroutes]
+const routes = [HealthcheckRoutes, ProfileRoutes]
 
 export default routes
