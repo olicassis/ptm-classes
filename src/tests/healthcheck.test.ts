@@ -2,8 +2,17 @@ import { beforeEach, jest, describe, test } from '@jest/globals'
 import request from 'supertest'
 
 import app from '../app'
+import { AppDataSource } from '../db/dataSource'
 
-import { mockedQuery } from './mocks/setMocks'
+jest.mock('../db/dataSource', () => ({
+  AppDataSource: {
+    query: jest.fn(),
+  },
+}))
+
+export const mockedQuery = AppDataSource.query as jest.MockedFunction<
+  typeof AppDataSource.query
+>
 
 describe('Healthcheck Test Suite', () => {
   beforeEach(() => {
