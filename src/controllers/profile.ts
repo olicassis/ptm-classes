@@ -4,6 +4,7 @@ import {
   fetchAllProfiles,
   fetchProfileById,
 } from '../db/repository/profileRepository'
+import { fetchProfileSubjectsByProfileId } from '../db/repository/subjectRepository'
 
 export async function fetchAllProfilesController(
   _req: Request,
@@ -26,16 +27,36 @@ export async function fetchProfileByIdController(
   req: Request,
   res: Response,
 ): Promise<void> {
-  console.info('[fetchProfileById] Called fetchProfileById')
+  console.info('[fetchProfileByIdController] Called fetchProfileByIdController')
   try {
     const profileId = req.params.id
     const profile = await fetchProfileById(profileId)
     res.status(200).json({
-      message: 'Profiles',
+      message: 'Profile',
       data: profile,
     })
   } catch (err) {
-    console.error('[fetchProfileById] Error:', err)
+    console.error('[fetchProfileByIdController] Error:', err)
     res.status(500).json({ message: 'Could not get profile' })
+  }
+}
+
+export async function fetchProfileSubjectsController(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  console.info(
+    '[fetchProfileSubjectsController] Called fetchProfileSubjectsController',
+  )
+  try {
+    const profileId = req.params.id
+    const profileSubjects = await fetchProfileSubjectsByProfileId(profileId)
+    res.status(200).json({
+      message: 'Profile Subjects',
+      data: profileSubjects,
+    })
+  } catch (err) {
+    console.error('[fetchProfileSubjectsController] Error:', err)
+    res.status(500).json({ message: 'Could not get profile subjects' })
   }
 }
