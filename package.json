@@ -13,7 +13,7 @@
     "migrations": "typeorm migration:run -d ./dist/db/dataSource.js",
     "migrations:revert": "typeorm migration:revert -d ./dist/db/dataSource.js",
     "seed": "ts-node src/db/seeds.ts",
-    "test": "jest"
+    "test": "jest --silent --runInBand --coverage --forceExit"
   },
   "lint-staged": {
     "*.ts": [
