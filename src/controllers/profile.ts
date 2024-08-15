@@ -4,6 +4,7 @@ import {
   fetchAllProfiles,
   fetchProfileById,
 } from '../db/repository/profileRepository'
+import { fetchProfileSchedulesByProfileIdWithRelations } from '../db/repository/scheduleRepository'
 import { fetchProfileSubjectsByProfileId } from '../db/repository/subjectRepository'
 
 export async function fetchAllProfilesController(
@@ -62,5 +63,28 @@ export async function fetchProfileSubjectsController(
   } catch (err) {
     console.error('[fetchProfileSubjectsController] Error:', err)
     res.status(500).json({ message: 'Could not get profile subjects' })
+  }
+}
+
+export async function fetchProfileSchedulesController(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  console.info(
+    '[fetchProfileSchedulesController] Called fetchProfileSchedulesController',
+  )
+  try {
+    const profileId = req.params.id
+    const profileSubjects = await fetchProfileSchedulesByProfileIdWithRelations(
+      profileId,
+      ['classRequest'],
+    )
+    res.status(200).json({
+      message: 'Profile Subjects',
+      data: profileSubjects,
+    })
+  } catch (err) {
+    console.error('[fetchProfileSchedulesController] Error:', err)
+    res.status(500).json({ message: 'Could not get profile schedules' })
   }
 }
