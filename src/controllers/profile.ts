@@ -31,6 +31,10 @@ export async function fetchProfileByIdController(
   try {
     const profileId = req.params.id
     const profile = await fetchProfileById(profileId)
+    if (!profile) {
+      res.status(404).json({ message: 'Profile not found' })
+      return
+    }
     res.status(200).json({
       message: 'Profile',
       data: profile,

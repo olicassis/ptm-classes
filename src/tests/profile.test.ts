@@ -71,13 +71,14 @@ describe('Get Profile By Id Test Suite', () => {
     expect(response.status).toEqual(200)
   })
 
-  test('Should return status 200 for a successful call to get profile by id with no existing profile', async () => {
+  test('Should return status 404 for a successful call to get profile by id with no existing profile', async () => {
     typeorm.onMock(ProfileEntity).toReturn(null, 'findOneBy')
     const response = await request(app).get(
       '/api/profile/fa39f8bd-8672-4691-bb7e-978109af0f30',
     )
-    expect(response.body.data).toBeNull()
-    expect(response.status).toEqual(200)
+    expect(response.body.data).toBeUndefined()
+    expect(response.body.message).toEqual('Profile not found')
+    expect(response.status).toEqual(404)
   })
 
   test('Should return status 500 when an error occurs calling get profile by id', async () => {
