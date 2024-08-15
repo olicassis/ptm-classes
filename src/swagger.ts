@@ -18,6 +18,6 @@ const doc = {
 }
 
 const outputFile = './swagger_output.json'
-const endpointsFiles = ['./routes/healthcheck.ts']
+const endpointsFiles = ['./routes/healthcheck.ts', './routes/profile.ts']
 
 swaggerAutogen({ openapi: '3.0.0' })(outputFile, endpointsFiles, doc)

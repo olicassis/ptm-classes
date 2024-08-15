@@ -10,6 +10,5 @@ const config: Config.InitialOptions = {
   testPathIgnorePatterns: ['<rootDir>/node_modules/'],
   displayName: 'utils',
   testMatch: ['<rootDir>/src/tests/**/?(*.)+(spec|test).ts?(x)'],
-  setupFiles: ['<rootDir>/src/tests/mocks/setMocks.ts'],
 }
 export default config
