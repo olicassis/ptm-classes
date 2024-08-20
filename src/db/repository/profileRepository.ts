@@ -12,3 +12,10 @@ export async function fetchProfileById(
   const profileRepository = AppDataSource.getRepository(ProfileEntity)
   return await profileRepository.findOneBy({ id: profileId })
 }
+
+export async function saveProfiles(
+  profiles: Partial<ProfileEntity>[],
+): Promise<ProfileEntity[]> {
+  const profileRepository = AppDataSource.getRepository(ProfileEntity)
+  return await profileRepository.save(profiles)
+}

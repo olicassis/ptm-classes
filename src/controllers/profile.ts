@@ -1,11 +1,14 @@
 import { Request, Response } from 'express'
 
+import { ProfileEntity } from '../db/entity/Profile'
 import {
   fetchAllProfiles,
   fetchProfileById,
+  saveProfiles,
 } from '../db/repository/profileRepository'
 import { fetchProfileSchedulesByProfileIdWithRelations } from '../db/repository/scheduleRepository'
 import { fetchProfileSubjectsByProfileId } from '../db/repository/subjectRepository'
+import { ResourceNotCreatedError } from '../errors/database.errors'
 
 export async function fetchAllProfilesController(
   _req: Request,
@@ -86,5 +89,28 @@ export async function fetchProfileSchedulesController(
   } catch (err) {
     console.error('[fetchProfileSchedulesController] Error:', err)
     res.status(500).json({ message: 'Could not get profile schedules' })
+  }
+}
+
+export async function createProfilesController(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  console.info('[createProfilesController] Called createProfilesController')
+  try {
+    const input = req.body as Partial<ProfileEntity>
+    const profile = await saveProfiles([input])
+
+    if (!profile || profile.length === 0) {
+      throw new ResourceNotCreatedError(`Could not create profile: ${input}`)
+    }
+
+    res.status(200).json({
+      message: 'Profile',
+      data: profile[0],
+    })
+  } catch (err) {
+    console.error('[createProfilesController] Error:', err)
+    res.status(500).json({ message: 'Could not create profile' })
   }
 }
