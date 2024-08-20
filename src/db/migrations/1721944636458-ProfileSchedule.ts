@@ -20,7 +20,12 @@ export class ProfileSchedule1721944636458 implements MigrationInterface {
         },
         { name: 'profile_id', type: 'uuid' },
         { name: 'date', type: 'timestamp' },
-        { name: 'status', type: 'varchar' },
+        {
+          name: 'status',
+          type: 'enum',
+          enum: ['unavailable', 'available'],
+          default: `'available'`,
+        },
         { name: 'created_at', type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
         {
           name: 'updated_at',
