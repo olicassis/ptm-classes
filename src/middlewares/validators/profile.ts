@@ -1,15 +1,15 @@
 import { JSONSchemaType } from 'ajv'
 
-import { ProfileStatus } from '../../enums/profile'
+import { ProfileRole } from '../../enums/profile'
 
 import { validateBody } from './base'
 
-interface CreateProfile {
+export interface CreateProfile {
   firstName: string
   lastName: string
   avatar?: string
   username: string
-  role?: ProfileStatus
+  role?: ProfileRole
 }
 
 const createProfileSchema: JSONSchemaType<CreateProfile> = {
@@ -21,7 +21,7 @@ const createProfileSchema: JSONSchemaType<CreateProfile> = {
     username: { type: 'string', minLength: 2 },
     role: {
       type: 'string',
-      enum: Object.values(ProfileStatus),
+      enum: Object.values(ProfileRole),
       nullable: true,
     },
   },

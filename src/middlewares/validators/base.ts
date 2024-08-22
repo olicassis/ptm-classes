@@ -13,6 +13,7 @@ export function validateBody<T>(schema: JSONSchemaType<T>): RequestHandler {
       const errors = validate?.errors ?? []
       console.error(`Validation Error: ${errors[0].message}`)
       res.status(400).json(validate.errors)
+      return
     }
     next()
   }

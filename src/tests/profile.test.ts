@@ -6,8 +6,11 @@ import app from '../app'
 import { ProfileEntity } from '../db/entity/Profile'
 import { ProfileScheduleEntity } from '../db/entity/ProfileSchedule'
 import { ProfileSubjectEntity } from '../db/entity/ProfileSubject'
+import { ResourceNotCreatedError } from '../errors/database.errors'
 
 import {
+  mockedCreateProfileInputInvalid,
+  mockedCreateProfileInputValid,
   mockedProfiles,
   mockedProfileSchedule,
   mockedProfileSubject,
@@ -201,5 +204,78 @@ describe('Get Profile Schedules By Profile Id Test Suite', () => {
     )
     expect(response.body.data).toBeUndefined()
     expect(response.status).toEqual(500)
+  })
+})
+
+describe('Post Profile Test Suite', () => {
+  let typeorm: MockTypeORM
+
+  beforeAll(() => {
+    typeorm = new MockTypeORM()
+  })
+
+  afterEach(() => {
+    typeorm.resetAll()
+  })
+
+  afterAll(() => {
+    typeorm.restore()
+  })
+
+  test('Should return status 200 for a successful call to post profile', async () => {
+    typeorm.onMock(ProfileEntity).toReturn([mockedProfiles[0]], 'save')
+    const response = await request(app)
+      .post('/api/profile')
+      .send(mockedCreateProfileInputValid)
+    expect(response.body.data).toEqual(mockedProfiles[0])
+    expect(response.status).toEqual(200)
+  })
+
+  test('Should return status 500 if no profile is created - null', async () => {
+    typeorm.onMock(ProfileEntity).toReturn(null, 'save')
+    const response = await request(app)
+      .post('/api/profile')
+      .send(mockedCreateProfileInputValid)
+    expect(response.body.data).toBeUndefined()
+    expect(response.status).toEqual(500)
+  })
+
+  test('Should return status 500 if no profile is created - empty array', async () => {
+    typeorm.onMock(ProfileEntity).toReturn([], 'save')
+    const response = await request(app)
+      .post('/api/profile')
+      .send(mockedCreateProfileInputValid)
+    expect(response.body.data).toBeUndefined()
+    expect(response.status).toEqual(500)
+  })
+
+  test('Should return status 500 when an error occurs creating a profile', async () => {
+    typeorm
+      .onMock(ProfileEntity)
+      .toReturn(
+        new ResourceNotCreatedError('An error has occurred creating profile'),
+        'save',
+      )
+    const response = await request(app)
+      .post('/api/profile')
+      .send(mockedCreateProfileInputValid)
+    expect(response.body.data).toBeUndefined()
+    expect(response.status).toEqual(500)
+  })
+
+  test('Should return a validation error if payload is invalid', async () => {
+    const response = await request(app)
+      .post('/api/profile')
+      .send(mockedCreateProfileInputInvalid)
+    expect(response.status).toEqual(400)
+    expect(response.body).toMatchObject([
+      {
+        instancePath: '',
+        keyword: 'required',
+        message: "must have required property 'username'",
+        params: { missingProperty: 'username' },
+        schemaPath: '#/required',
+      },
+    ])
   })
 })
