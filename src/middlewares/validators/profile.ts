@@ -4,7 +4,7 @@ import { ProfileRole } from '../../enums/profile'
 
 import { validateBody } from './base'
 
-export interface CreateProfile {
+export interface CreateProfileRequest {
   firstName: string
   lastName: string
   avatar?: string
@@ -12,7 +12,7 @@ export interface CreateProfile {
   role?: ProfileRole
 }
 
-const createProfileSchema: JSONSchemaType<CreateProfile> = {
+const createProfileSchema: JSONSchemaType<CreateProfileRequest> = {
   type: 'object',
   properties: {
     firstName: { type: 'string', minLength: 2 },

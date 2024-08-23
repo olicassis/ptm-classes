@@ -5,7 +5,7 @@ import {
   fetchProfileByIdController,
   fetchProfileSubjectsController,
   fetchProfileSchedulesController,
-  createProfilesController,
+  createProfileController,
 } from '../controllers/profile'
 import { getCreateProfileValidator } from '../middlewares/validators/profile'
 
@@ -17,6 +17,6 @@ router.get('/profile/:id', fetchProfileByIdController)
 router.get('/profile/:id/subjects', fetchProfileSubjectsController)
 router.get('/profile/:id/schedules', fetchProfileSchedulesController)
 
-router.post('/profile', getCreateProfileValidator, createProfilesController)
+router.post('/profile', getCreateProfileValidator, createProfileController)
 
 export default router
