@@ -8,3 +8,11 @@ export async function fetchProfileSubjectsByProfileId(
     AppDataSource.getRepository(ProfileSubjectEntity)
   return await profileSubjectRepository.findBy({ profileId: profileId })
 }
+
+export async function saveSubjects(
+  profileSubjects: Partial<ProfileSubjectEntity>[],
+): Promise<ProfileSubjectEntity[]> {
+  const profileSubjectRepository =
+    AppDataSource.getRepository(ProfileSubjectEntity)
+  return await profileSubjectRepository.save(profileSubjects)
+}
