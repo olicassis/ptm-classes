@@ -25,7 +25,12 @@ export async function createSubjectController(
       return
     }
 
-    const subject = await saveSubjects([input])
+    const subject = await saveSubjects([
+      {
+        profileId: input.profileId,
+        label: input.label.toLowerCase(),
+      },
+    ])
 
     if (!subject || subject.length === 0) {
       throw new ResourceNotCreatedError(`Could not create subject: ${input}`)
