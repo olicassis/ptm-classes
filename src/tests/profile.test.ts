@@ -6,7 +6,6 @@ import app from '../app'
 import { ProfileEntity } from '../db/entity/Profile'
 import { ProfileScheduleEntity } from '../db/entity/ProfileSchedule'
 import { ProfileSubjectEntity } from '../db/entity/ProfileSubject'
-import { ResourceNotCreatedError } from '../errors/database.errors'
 
 import {
   mockedCreateProfileInputInvalid,
@@ -252,10 +251,7 @@ describe('Post Profile Test Suite', () => {
   test('Should return status 500 when an error occurs creating a profile', async () => {
     typeorm
       .onMock(ProfileEntity)
-      .toReturn(
-        new ResourceNotCreatedError('An error has occurred creating profile'),
-        'save',
-      )
+      .toReturn(new Error('An error has occurred creating profile'), 'save')
     const response = await request(app)
       .post('/api/profile')
       .send(mockedCreateProfileInputValid)
