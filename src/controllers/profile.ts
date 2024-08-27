@@ -83,7 +83,7 @@ export async function fetchProfileSchedulesController(
       ['classRequest'],
     )
     res.status(200).json({
-      message: 'Profile Subjects',
+      message: 'Profile Schedules',
       data: profileSubjects,
     })
   } catch (err) {
