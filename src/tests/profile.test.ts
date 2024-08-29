@@ -13,7 +13,7 @@ import {
   mockedProfiles,
   mockedProfileSchedule,
   mockedProfileSubject,
-} from './mocks/profile'
+} from './mocks/profile.mock'
 
 describe('Get Profiles Test Suite', () => {
   let typeorm: MockTypeORM

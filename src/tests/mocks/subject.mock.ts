@@ -1,7 +1,7 @@
 import { ProfileSubjectEntity } from '../../db/entity/ProfileSubject'
 import { CreateSubjectRequest } from '../../middlewares/validators/subject'
 
-import { mockedProfiles } from './profile'
+import { mockedProfiles } from './profile.mock'
 
 export const mockedCreateProfileSubjectInputValid: CreateSubjectRequest = {
   profileId: mockedProfiles[1].id,

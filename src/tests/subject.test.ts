@@ -6,12 +6,12 @@ import app from '../app'
 import { ProfileEntity } from '../db/entity/Profile'
 import { ProfileSubjectEntity } from '../db/entity/ProfileSubject'
 
-import { mockedProfiles } from './mocks/profile'
+import { mockedProfiles } from './mocks/profile.mock'
 import {
   mockedCreateProfileSubjectInputInvalid,
   mockedCreateProfileSubjectInputValid,
   mockedProfileSubject,
-} from './mocks/subject'
+} from './mocks/subject.mock'
 
 describe('Post Subject Test Suite', () => {
   let typeorm: MockTypeORM
