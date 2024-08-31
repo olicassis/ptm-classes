@@ -17,13 +17,14 @@ export async function createScheduleController(
   console.info('[createScheduleController] Called createScheduleController')
   try {
     const input = req.body as CreateScheduleRequest
-    const profile = await fetchProfileById(input.profileId)
     const inputDate = new Date(input.date)
 
     if (inputDate < new Date()) {
       res.status(403).json({ message: 'A schedule date must be in the future' })
       return
     }
+
+    const profile = await fetchProfileById(input.profileId)
 
     if (!profile) {
       res.status(404).json({ message: 'Profile not found' })
@@ -38,11 +39,6 @@ export async function createScheduleController(
     const existingSchedules = await fetchNonExpiredProfileSchedules(
       input.profileId,
     )
-
-    if (!existingSchedules) {
-      res.status(403).json({ message: 'Could not check date overlapping' })
-      return
-    }
 
     if (checkDateOverlapping(input.date, existingSchedules)) {
       res.status(403).json({
@@ -59,7 +55,7 @@ export async function createScheduleController(
       },
     ])
 
-    if (!schedule || schedule.length === 0) {
+    if (schedule.length === 0) {
       throw new ResourceNotCreatedError(`Could not create schedule: ${input}`)
     }
 
