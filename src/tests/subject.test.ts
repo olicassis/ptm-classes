@@ -1,10 +1,9 @@
-import { describe, test } from '@jest/globals'
-import { MockTypeORM } from 'mock-typeorm'
+import { describe, test, jest } from '@jest/globals'
 import request from 'supertest'
 
 import app from '../app'
-import { ProfileEntity } from '../db/entity/Profile'
-import { ProfileSubjectEntity } from '../db/entity/ProfileSubject'
+import { fetchProfileById } from '../db/repository/profileRepository'
+import { saveSubjects } from '../db/repository/subjectRepository'
 
 import { mockedProfiles } from './mocks/profile.mock'
 import {
@@ -13,87 +12,127 @@ import {
   mockedProfileSubject,
 } from './mocks/subject.mock'
 
+jest.mock('../db/repository/profileRepository')
+
+const mockedFetchProfileById = fetchProfileById as jest.MockedFunction<
+  typeof fetchProfileById
+>
+
+jest.mock('../db/repository/subjectRepository')
+
+const mockedSaveSubjects = saveSubjects as jest.MockedFunction<
+  typeof saveSubjects
+>
+
 describe('Post Subject Test Suite', () => {
-  let typeorm: MockTypeORM
-
-  beforeAll(() => {
-    typeorm = new MockTypeORM()
-  })
-
-  afterEach(() => {
-    typeorm.resetAll()
-  })
-
-  afterAll(() => {
-    typeorm.restore()
+  beforeEach(() => {
+    jest.clearAllMocks()
   })
 
   test('Should return status 200 for a successful call to post subject', async () => {
-    typeorm.onMock(ProfileEntity).toReturn(mockedProfiles[1], 'findOneBy')
-    typeorm
-      .onMock(ProfileSubjectEntity)
-      .toReturn([mockedProfileSubject], 'save')
+    mockedFetchProfileById.mockResolvedValueOnce(mockedProfiles[1])
+    mockedSaveSubjects.mockResolvedValueOnce([mockedProfileSubject])
     const response = await request(app)
       .post('/api/subject')
       .send(mockedCreateProfileSubjectInputValid)
-    expect(response.body.data).toEqual(mockedProfileSubject)
+    expect(mockedFetchProfileById).toHaveBeenCalledWith(
+      mockedCreateProfileSubjectInputValid.profileId,
+    )
+    expect(mockedFetchProfileById).toHaveBeenCalledTimes(1)
+    expect(mockedSaveSubjects).toHaveBeenCalledWith([
+      {
+        profileId: mockedCreateProfileSubjectInputValid.profileId,
+        label: mockedCreateProfileSubjectInputValid.label.toLowerCase(),
+      },
+    ])
+    expect(mockedSaveSubjects).toHaveBeenCalledTimes(1)
+    expect(response.body.data).toMatchObject(mockedProfileSubject)
     expect(response.status).toEqual(200)
+    expect(response.body.message).toBeDefined()
   })
 
   test('Should return status 404 for a non existing profile', async () => {
-    typeorm.onMock(ProfileEntity).toReturn(null, 'findOneBy')
+    mockedFetchProfileById.mockResolvedValueOnce(null)
     const response = await request(app)
       .post('/api/subject')
       .send(mockedCreateProfileSubjectInputValid)
-    expect(response.body.data).toBeUndefined()
+    expect(mockedFetchProfileById).toHaveBeenCalledWith(
+      mockedCreateProfileSubjectInputValid.profileId,
+    )
+    expect(mockedFetchProfileById).toHaveBeenCalledTimes(1)
+    expect(mockedSaveSubjects).not.toHaveBeenCalled()
     expect(response.status).toEqual(404)
+    expect(response.body.data).toBeUndefined()
+    expect(response.body.message).toBeDefined()
   })
 
   test('Should return status 403 if profile is not a teacher profile', async () => {
-    typeorm.onMock(ProfileEntity).toReturn(mockedProfiles[0], 'findOneBy')
+    mockedFetchProfileById.mockResolvedValueOnce(mockedProfiles[0])
     const response = await request(app)
       .post('/api/subject')
       .send(mockedCreateProfileSubjectInputValid)
-    expect(response.body.data).toBeUndefined()
+    expect(mockedFetchProfileById).toHaveBeenCalledWith(
+      mockedCreateProfileSubjectInputValid.profileId,
+    )
+    expect(mockedFetchProfileById).toHaveBeenCalledTimes(1)
+    expect(mockedSaveSubjects).not.toHaveBeenCalled()
     expect(response.status).toEqual(403)
+    expect(response.body.data).toBeUndefined()
+    expect(response.body.message).toBeDefined()
   })
 
-  test('Should return status 500 when an error occurs creating a subject', async () => {
-    typeorm.onMock(ProfileEntity).toReturn(mockedProfiles[1], 'findOneBy')
-    typeorm
-      .onMock(ProfileSubjectEntity)
-      .toReturn(new Error('An error has occurred creating subject'), 'save')
+  test('Should return status 500 when an error occurs', async () => {
+    mockedFetchProfileById.mockResolvedValueOnce(mockedProfiles[1])
+    mockedSaveSubjects.mockImplementationOnce(() => {
+      throw new Error('An error has occurred creating subject')
+    })
     const response = await request(app)
       .post('/api/subject')
       .send(mockedCreateProfileSubjectInputValid)
-    expect(response.body.data).toBeUndefined()
+    expect(mockedFetchProfileById).toHaveBeenCalledWith(
+      mockedCreateProfileSubjectInputValid.profileId,
+    )
+    expect(mockedFetchProfileById).toHaveBeenCalledTimes(1)
+    expect(mockedSaveSubjects).toHaveBeenCalledWith([
+      {
+        profileId: mockedCreateProfileSubjectInputValid.profileId,
+        label: mockedCreateProfileSubjectInputValid.label.toLowerCase(),
+      },
+    ])
+    expect(mockedSaveSubjects).toHaveBeenCalledTimes(1)
     expect(response.status).toEqual(500)
+    expect(response.body.data).toBeUndefined()
+    expect(response.body.message).toBeDefined()
   })
 
-  test('Should return status 500 when no subject is created - null', async () => {
-    typeorm.onMock(ProfileEntity).toReturn(mockedProfiles[1], 'findOneBy')
-    typeorm.onMock(ProfileSubjectEntity).toReturn(null, 'save')
+  test('Should return status 500 if no subject is created for a valid input', async () => {
+    mockedFetchProfileById.mockResolvedValueOnce(mockedProfiles[1])
+    mockedSaveSubjects.mockResolvedValueOnce([])
     const response = await request(app)
       .post('/api/subject')
       .send(mockedCreateProfileSubjectInputValid)
-    expect(response.body.data).toBeUndefined()
+    expect(mockedFetchProfileById).toHaveBeenCalledWith(
+      mockedCreateProfileSubjectInputValid.profileId,
+    )
+    expect(mockedFetchProfileById).toHaveBeenCalledTimes(1)
+    expect(mockedSaveSubjects).toHaveBeenCalledWith([
+      {
+        profileId: mockedCreateProfileSubjectInputValid.profileId,
+        label: mockedCreateProfileSubjectInputValid.label.toLowerCase(),
+      },
+    ])
+    expect(mockedSaveSubjects).toHaveBeenCalledTimes(1)
     expect(response.status).toEqual(500)
-  })
-
-  test('Should return status 500 when no subject is created - null', async () => {
-    typeorm.onMock(ProfileEntity).toReturn(mockedProfiles[1], 'findOneBy')
-    typeorm.onMock(ProfileSubjectEntity).toReturn([], 'save')
-    const response = await request(app)
-      .post('/api/subject')
-      .send(mockedCreateProfileSubjectInputValid)
     expect(response.body.data).toBeUndefined()
-    expect(response.status).toEqual(500)
+    expect(response.body.message).toBeDefined()
   })
 
   test('Should return a validation error if payload is invalid', async () => {
     const response = await request(app)
       .post('/api/subject')
       .send(mockedCreateProfileSubjectInputInvalid)
+    expect(mockedFetchProfileById).not.toHaveBeenCalled()
+    expect(mockedSaveSubjects).not.toHaveBeenCalled()
     expect(response.status).toEqual(400)
     expect(response.body).toMatchObject([
       {

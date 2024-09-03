@@ -32,7 +32,7 @@ export async function createSubjectController(
       },
     ])
 
-    if (!subject || subject.length === 0) {
+    if (subject.length === 0) {
       throw new ResourceNotCreatedError(`Could not create subject: ${input}`)
     }
 
