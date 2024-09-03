@@ -1,11 +1,14 @@
-import { describe, test } from '@jest/globals'
-import { MockTypeORM } from 'mock-typeorm'
+import { describe, test, jest } from '@jest/globals'
 import request from 'supertest'
 
 import app from '../app'
-import { ProfileEntity } from '../db/entity/Profile'
-import { ProfileScheduleEntity } from '../db/entity/ProfileSchedule'
-import { ProfileSubjectEntity } from '../db/entity/ProfileSubject'
+import {
+  fetchAllProfiles,
+  fetchProfileById,
+  saveProfiles,
+} from '../db/repository/profileRepository'
+import { fetchProfileSchedulesByProfileIdWithRelations } from '../db/repository/scheduleRepository'
+import { fetchProfileSubjectsByProfileId } from '../db/repository/subjectRepository'
 
 import {
   mockedCreateProfileInputInvalid,
@@ -15,151 +18,167 @@ import {
   mockedProfileSubject,
 } from './mocks/profile.mock'
 
+jest.mock('../db/repository/profileRepository')
+
+const mockedFetchAllProfiles = fetchAllProfiles as jest.MockedFunction<
+  typeof fetchAllProfiles
+>
+
+const mockedSaveProfiles = saveProfiles as jest.MockedFunction<
+  typeof saveProfiles
+>
+
+const mockedFetchProfileById = fetchProfileById as jest.MockedFunction<
+  typeof fetchProfileById
+>
+
+jest.mock('../db/repository/subjectRepository')
+
+const mockedFetchProfileSubjectsByProfileId =
+  fetchProfileSubjectsByProfileId as jest.MockedFunction<
+    typeof fetchProfileSubjectsByProfileId
+  >
+
+jest.mock('../db/repository/scheduleRepository')
+
+const mockedFetchProfileSchedulesByProfileIdWithRelations =
+  fetchProfileSchedulesByProfileIdWithRelations as jest.MockedFunction<
+    typeof fetchProfileSchedulesByProfileIdWithRelations
+  >
+
 describe('Get Profiles Test Suite', () => {
-  let typeorm: MockTypeORM
-
-  beforeAll(() => {
-    typeorm = new MockTypeORM()
-  })
-
-  afterEach(() => {
-    typeorm.resetAll()
-  })
-
-  afterAll(() => {
-    typeorm.restore()
+  beforeEach(() => {
+    jest.clearAllMocks()
   })
 
   test('Should return status 200 for a successful call to get profiles with existing profiles', async () => {
-    typeorm.onMock(ProfileEntity).toReturn(mockedProfiles, 'find')
+    mockedFetchAllProfiles.mockResolvedValueOnce(mockedProfiles)
     const response = await request(app).get('/api/profiles')
+    expect(mockedFetchAllProfiles).toHaveBeenCalledTimes(1)
     expect(response.body.data).toEqual(mockedProfiles)
+    expect(response.body.message).toBeDefined()
     expect(response.status).toEqual(200)
   })
 
   test('Should return status 200 for a successful call to get profiles with no existing profiles', async () => {
-    typeorm.onMock(ProfileEntity).toReturn([], 'find')
+    mockedFetchAllProfiles.mockResolvedValueOnce([])
     const response = await request(app).get('/api/profiles')
+    expect(mockedFetchAllProfiles).toHaveBeenCalledTimes(1)
     expect(response.body.data.length).toEqual(0)
+    expect(response.body.message).toBeDefined()
     expect(response.status).toEqual(200)
   })
 
-  test('Should return status 500 when an error occurs calling get profiles', async () => {
-    typeorm
-      .onMock(ProfileEntity)
-      .toReturn(new Error('An error has occurred'), 'find')
+  test('Should return status 500 when an error occurs', async () => {
+    mockedFetchAllProfiles.mockImplementationOnce(() => {
+      throw new Error('An error has occurred')
+    })
     const response = await request(app).get('/api/profiles')
     expect(response.body.data).toBeUndefined()
+    expect(response.body.message).toBeDefined()
     expect(response.status).toEqual(500)
   })
 })
 
 describe('Get Profile By Id Test Suite', () => {
-  let typeorm: MockTypeORM
-
-  beforeAll(() => {
-    typeorm = new MockTypeORM()
-  })
-
-  afterEach(() => {
-    typeorm.resetAll()
-  })
-
-  afterAll(() => {
-    typeorm.restore()
+  beforeEach(() => {
+    jest.clearAllMocks()
   })
 
   test('Should return status 200 for a successful call to get profile by id with existing profile', async () => {
-    typeorm.onMock(ProfileEntity).toReturn(mockedProfiles[0], 'findOneBy')
+    mockedFetchProfileById.mockResolvedValueOnce(mockedProfiles[0])
     const response = await request(app).get(
-      '/api/profile/3a5ada5e-940f-439a-b333-bb4d48159cd9',
+      `/api/profile/${mockedProfiles[0].id}`,
     )
+    expect(mockedFetchProfileById).toHaveBeenCalledWith(mockedProfiles[0].id)
+    expect(mockedFetchProfileById).toHaveBeenCalledTimes(1)
+    expect(response.body.message).toBeDefined()
     expect(response.body.data).toEqual(mockedProfiles[0])
     expect(response.status).toEqual(200)
   })
 
   test('Should return status 404 for a successful call to get profile by id with no existing profile', async () => {
-    typeorm.onMock(ProfileEntity).toReturn(null, 'findOneBy')
+    mockedFetchProfileById.mockResolvedValueOnce(null)
     const response = await request(app).get(
-      '/api/profile/fa39f8bd-8672-4691-bb7e-978109af0f30',
+      `/api/profile/${mockedProfiles[0].id}`,
     )
+    expect(mockedFetchProfileById).toHaveBeenCalledWith(mockedProfiles[0].id)
+    expect(mockedFetchProfileById).toHaveBeenCalledTimes(1)
     expect(response.body.data).toBeUndefined()
-    expect(response.body.message).toEqual('Profile not found')
+    expect(response.body.message).toBeDefined()
     expect(response.status).toEqual(404)
   })
 
-  test('Should return status 500 when an error occurs calling get profile by id', async () => {
-    typeorm
-      .onMock(ProfileEntity)
-      .toReturn(new Error('An error has occurred'), 'findOneBy')
+  test('Should return status 500 when an error occurs', async () => {
+    mockedFetchProfileById.mockImplementationOnce(() => {
+      throw new Error('An error has occurred')
+    })
     const response = await request(app).get(
-      '/api/profile/3a5ada5e-940f-439a-b333-bb4d48159cd9',
+      `/api/profile/${mockedProfiles[0].id}`,
     )
+    expect(mockedFetchProfileById).toHaveBeenCalledWith(mockedProfiles[0].id)
+    expect(mockedFetchProfileById).toHaveBeenCalledTimes(1)
     expect(response.body.data).toBeUndefined()
+    expect(response.body.message).toBeDefined()
     expect(response.status).toEqual(500)
   })
 })
 
 describe('Get Profile Subjects By Profile Id Test Suite', () => {
-  let typeorm: MockTypeORM
-
-  beforeAll(() => {
-    typeorm = new MockTypeORM()
-  })
-
-  afterEach(() => {
-    typeorm.resetAll()
-  })
-
-  afterAll(() => {
-    typeorm.restore()
+  beforeEach(() => {
+    jest.clearAllMocks()
   })
 
   test('Should return status 200 for a successful call to get profile with profile subjects', async () => {
-    typeorm
-      .onMock(ProfileSubjectEntity)
-      .toReturn([mockedProfileSubject], 'findBy')
+    mockedFetchProfileSubjectsByProfileId.mockResolvedValueOnce([
+      mockedProfileSubject,
+    ])
     const response = await request(app).get(
-      '/api/profile/ea123e3a-d922-4d37-833e-022375631298/subjects',
+      `/api/profile/${mockedProfiles[1].id}/subjects`,
     )
+    expect(mockedFetchProfileSubjectsByProfileId).toHaveBeenCalledWith(
+      mockedProfiles[1].id,
+    )
+    expect(mockedFetchProfileSubjectsByProfileId).toHaveBeenCalledTimes(1)
     expect(response.body.data).toEqual([mockedProfileSubject])
+    expect(response.body.message).toBeDefined()
     expect(response.status).toEqual(200)
   })
 
   test('Should return status 200 for a successful call to get profile with no profile subjects', async () => {
-    typeorm.onMock(ProfileSubjectEntity).toReturn([], 'findBy')
+    mockedFetchProfileSubjectsByProfileId.mockResolvedValueOnce([])
     const response = await request(app).get(
-      '/api/profile/3a5ada5e-940f-439a-b333-bb4d48159cd9/subjects',
+      `/api/profile/${mockedProfiles[1].id}/subjects`,
     )
+    expect(mockedFetchProfileSubjectsByProfileId).toHaveBeenCalledWith(
+      mockedProfiles[1].id,
+    )
+    expect(mockedFetchProfileSubjectsByProfileId).toHaveBeenCalledTimes(1)
     expect(response.body.data.length).toEqual(0)
+    expect(response.body.message).toBeDefined()
     expect(response.status).toEqual(200)
   })
 
-  test('Should return status 500 when an error occurs calling get profile subjects by profile id', async () => {
-    typeorm
-      .onMock(ProfileSubjectEntity)
-      .toReturn(new Error('An error has occurred'), 'findBy')
+  test('Should return status 500 when an error occurs', async () => {
+    mockedFetchProfileSubjectsByProfileId.mockImplementationOnce(() => {
+      throw new Error('An error has occurred')
+    })
     const response = await request(app).get(
-      '/api/profile/ea123e3a-d922-4d37-833e-022375631298/subjects',
+      `/api/profile/${mockedProfiles[1].id}/subjects`,
     )
+    expect(mockedFetchProfileSubjectsByProfileId).toHaveBeenCalledWith(
+      mockedProfiles[1].id,
+    )
+    expect(mockedFetchProfileSubjectsByProfileId).toHaveBeenCalledTimes(1)
     expect(response.body.data).toBeUndefined()
+    expect(response.body.message).toBeDefined()
     expect(response.status).toEqual(500)
   })
 })
 
 describe('Get Profile Schedules By Profile Id Test Suite', () => {
-  let typeorm: MockTypeORM
-
-  beforeAll(() => {
-    typeorm = new MockTypeORM()
-  })
-
-  afterEach(() => {
-    typeorm.resetAll()
-  })
-
-  afterAll(() => {
-    typeorm.restore()
+  beforeEach(() => {
+    jest.clearAllMocks()
   })
 
   test('Should return status 200 for a successful call to get profile with profile schedules', async () => {
@@ -175,86 +194,107 @@ describe('Get Profile Schedules By Profile Id Test Suite', () => {
         },
       }),
     )
-    typeorm
-      .onMock(ProfileScheduleEntity)
-      .toReturn([mockedProfileSchedule], 'find')
+    mockedFetchProfileSchedulesByProfileIdWithRelations.mockResolvedValueOnce([
+      mockedProfileSchedule,
+    ])
     const response = await request(app).get(
-      '/api/profile/ea123e3a-d922-4d37-833e-022375631298/schedules',
+      `/api/profile/${mockedProfiles[1].id}/schedules`,
     )
+    expect(
+      mockedFetchProfileSchedulesByProfileIdWithRelations,
+    ).toHaveBeenCalledWith(mockedProfiles[1].id, ['classRequest'])
+    expect(
+      mockedFetchProfileSchedulesByProfileIdWithRelations,
+    ).toHaveBeenCalledTimes(1)
     expect(response.body.data).toEqual(plainMockedProfileSchedule)
+    expect(response.body.message).toBeDefined()
     expect(response.status).toEqual(200)
   })
 
   test('Should return status 200 for a successful call to get profile with no profile schedules', async () => {
-    typeorm.onMock(ProfileScheduleEntity).toReturn([], 'find')
-    const response = await request(app).get(
-      '/api/profile/3a5ada5e-940f-439a-b333-bb4d48159cd9/schedules',
+    mockedFetchProfileSchedulesByProfileIdWithRelations.mockResolvedValueOnce(
+      [],
     )
+    const response = await request(app).get(
+      `/api/profile/${mockedProfiles[1].id}/schedules`,
+    )
+    expect(
+      mockedFetchProfileSchedulesByProfileIdWithRelations,
+    ).toHaveBeenCalledWith(mockedProfiles[1].id, ['classRequest'])
+    expect(
+      mockedFetchProfileSchedulesByProfileIdWithRelations,
+    ).toHaveBeenCalledTimes(1)
     expect(response.body.data.length).toEqual(0)
+    expect(response.body.message).toBeDefined()
     expect(response.status).toEqual(200)
   })
 
   test('Should return status 500 when an error occurs calling get profile schedules by profile id', async () => {
-    typeorm
-      .onMock(ProfileScheduleEntity)
-      .toReturn(new Error('An error has occurred'), 'find')
-    const response = await request(app).get(
-      '/api/profile/ea123e3a-d922-4d37-833e-022375631298/schedules',
+    mockedFetchProfileSchedulesByProfileIdWithRelations.mockImplementationOnce(
+      () => {
+        throw new Error('An error has occurred')
+      },
     )
+    const response = await request(app).get(
+      `/api/profile/${mockedProfiles[1].id}/schedules`,
+    )
+    expect(
+      mockedFetchProfileSchedulesByProfileIdWithRelations,
+    ).toHaveBeenCalledWith(mockedProfiles[1].id, ['classRequest'])
+    expect(
+      mockedFetchProfileSchedulesByProfileIdWithRelations,
+    ).toHaveBeenCalledTimes(1)
     expect(response.body.data).toBeUndefined()
+    expect(response.body.message).toBeDefined()
     expect(response.status).toEqual(500)
   })
 })
 
 describe('Post Profile Test Suite', () => {
-  let typeorm: MockTypeORM
-
-  beforeAll(() => {
-    typeorm = new MockTypeORM()
-  })
-
-  afterEach(() => {
-    typeorm.resetAll()
-  })
-
-  afterAll(() => {
-    typeorm.restore()
+  beforeEach(() => {
+    jest.clearAllMocks()
   })
 
   test('Should return status 200 for a successful call to post profile', async () => {
-    typeorm.onMock(ProfileEntity).toReturn([mockedProfiles[0]], 'save')
+    mockedSaveProfiles.mockResolvedValueOnce([mockedProfiles[0]])
     const response = await request(app)
       .post('/api/profile')
       .send(mockedCreateProfileInputValid)
+    expect(mockedSaveProfiles).toHaveBeenCalledWith([
+      mockedCreateProfileInputValid,
+    ])
+    expect(mockedSaveProfiles).toHaveBeenCalledTimes(1)
+    expect(response.body.message).toBeDefined()
     expect(response.body.data).toEqual(mockedProfiles[0])
     expect(response.status).toEqual(200)
   })
 
-  test('Should return status 500 if no profile is created - null', async () => {
-    typeorm.onMock(ProfileEntity).toReturn(null, 'save')
+  test('Should return status 500 if no profile is created', async () => {
+    mockedSaveProfiles.mockResolvedValueOnce([])
     const response = await request(app)
       .post('/api/profile')
       .send(mockedCreateProfileInputValid)
+    expect(mockedSaveProfiles).toHaveBeenCalledWith([
+      mockedCreateProfileInputValid,
+    ])
+    expect(mockedSaveProfiles).toHaveBeenCalledTimes(1)
+    expect(response.body.message).toBeDefined()
     expect(response.body.data).toBeUndefined()
     expect(response.status).toEqual(500)
   })
 
-  test('Should return status 500 if no profile is created - empty array', async () => {
-    typeorm.onMock(ProfileEntity).toReturn([], 'save')
+  test('Should return status 500 when an error occurs', async () => {
+    mockedSaveProfiles.mockImplementationOnce(() => {
+      throw new Error('An error has occurred')
+    })
     const response = await request(app)
       .post('/api/profile')
       .send(mockedCreateProfileInputValid)
-    expect(response.body.data).toBeUndefined()
-    expect(response.status).toEqual(500)
-  })
-
-  test('Should return status 500 when an error occurs creating a profile', async () => {
-    typeorm
-      .onMock(ProfileEntity)
-      .toReturn(new Error('An error has occurred creating profile'), 'save')
-    const response = await request(app)
-      .post('/api/profile')
-      .send(mockedCreateProfileInputValid)
+    expect(mockedSaveProfiles).toHaveBeenCalledWith([
+      mockedCreateProfileInputValid,
+    ])
+    expect(mockedSaveProfiles).toHaveBeenCalledTimes(1)
+    expect(response.body.message).toBeDefined()
     expect(response.body.data).toBeUndefined()
     expect(response.status).toEqual(500)
   })
@@ -263,6 +303,7 @@ describe('Post Profile Test Suite', () => {
     const response = await request(app)
       .post('/api/profile')
       .send(mockedCreateProfileInputInvalid)
+    expect(mockedSaveProfiles).not.toHaveBeenCalled()
     expect(response.status).toEqual(400)
     expect(response.body).toMatchObject([
       {

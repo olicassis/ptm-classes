@@ -101,7 +101,7 @@ export async function createProfileController(
     const input = req.body as CreateProfileRequest
     const profile = await saveProfiles([input])
 
-    if (!profile || profile.length === 0) {
+    if (profile.length === 0) {
       throw new ResourceNotCreatedError(`Could not create profile: ${input}`)
     }
 
