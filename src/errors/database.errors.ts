@@ -4,3 +4,10 @@ export class ResourceNotCreatedError extends Error {
     this.name = 'ResourceNotCreatedError'
   }
 }
+
+export class ResourceNotUpdatedError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'ResourceNotUpdatedError'
+  }
+}

@@ -8,7 +8,7 @@ export class AddUniqueConstraintToClassRequest1724457829205
       'class_request',
       new TableIndex({
         name: 'IDX_CLASS_REQUEST_UNIQUE',
-        columnNames: ['student_profile_id', 'profile_schedule_id'],
+        columnNames: ['profile_schedule_id'],
         isUnique: true,
       }),
     )
