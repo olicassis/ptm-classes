@@ -51,7 +51,7 @@ export async function createClassRequestController(
 
     if (updateResult?.status !== ProfileScheduleStatus.UNAVAILABLE) {
       throw new ResourceNotUpdatedError(
-        `Could not create class request: ${input}`,
+        `Could not update profile schedule status: ${input.profileScheduleId}`,
       )
     }
 
