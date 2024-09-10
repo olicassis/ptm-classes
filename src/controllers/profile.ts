@@ -4,10 +4,15 @@ import {
   fetchAllProfiles,
   fetchProfileById,
   saveProfiles,
+  updateProfileStatus,
 } from '../db/repository/profileRepository'
 import { fetchProfileSchedulesByProfileIdWithRelations } from '../db/repository/scheduleRepository'
 import { fetchProfileSubjectsByProfileId } from '../db/repository/subjectRepository'
-import { ResourceNotCreatedError } from '../errors/database.errors'
+import { ProfileStatus } from '../enums/profile'
+import {
+  ResourceNotCreatedError,
+  ResourceNotUpdatedError,
+} from '../errors/database.errors'
 import { CreateProfileRequest } from '../middlewares/validators/profile'
 
 export async function fetchAllProfilesController(
@@ -112,5 +117,39 @@ export async function createProfileController(
   } catch (err) {
     console.error('[createProfileController] Error:', err)
     res.status(500).json({ message: 'Could not create profile' })
+  }
+}
+
+export async function verifyProfileStatusController(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  console.info(
+    '[verifyProfileStatusController] Called verifyProfileStatusController',
+  )
+  try {
+    const profileId = req.params.id as string
+    const profile = await updateProfileStatus(profileId, ProfileStatus.VERIFIED)
+
+    if (profile?.status !== ProfileStatus.VERIFIED) {
+      throw new ResourceNotUpdatedError(
+        `Could not update profile status: ${profileId}`,
+      )
+    }
+
+    res.status(200).json({
+      message: 'Profile verified',
+      data: {
+        success: true,
+      },
+    })
+  } catch (err) {
+    console.error('[verifyProfileStatusController] Error:', err)
+    res.status(500).json({
+      message: 'Could not verify profile',
+      data: {
+        success: false,
+      },
+    })
   }
 }
