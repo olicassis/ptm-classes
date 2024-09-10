@@ -6,9 +6,11 @@ import {
   fetchAllProfiles,
   fetchProfileById,
   saveProfiles,
+  updateProfileStatus,
 } from '../db/repository/profileRepository'
 import { fetchProfileSchedulesByProfileIdWithRelations } from '../db/repository/scheduleRepository'
 import { fetchProfileSubjectsByProfileId } from '../db/repository/subjectRepository'
+import { ProfileStatus } from '../enums/profile'
 
 import {
   mockedCreateProfileInputInvalid,
@@ -30,6 +32,10 @@ const mockedSaveProfiles = saveProfiles as jest.MockedFunction<
 
 const mockedFetchProfileById = fetchProfileById as jest.MockedFunction<
   typeof fetchProfileById
+>
+
+const mockedUpdateProfileStatus = updateProfileStatus as jest.MockedFunction<
+  typeof updateProfileStatus
 >
 
 jest.mock('../db/repository/subjectRepository')
@@ -314,5 +320,73 @@ describe('Post Profile Test Suite', () => {
         schemaPath: '#/required',
       },
     ])
+  })
+})
+
+describe('Verify Profile Test Suite', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
+  test('Should return status 200 for a successful call to verify profile status', async () => {
+    mockedUpdateProfileStatus.mockResolvedValueOnce(mockedProfiles[1])
+    const response = await request(app).patch(
+      `/api/profile/${mockedProfiles[1].id}/status/verified`,
+    )
+    expect(mockedUpdateProfileStatus).toHaveBeenCalledWith(
+      mockedProfiles[1].id,
+      ProfileStatus.VERIFIED,
+    )
+    expect(mockedUpdateProfileStatus).toHaveBeenCalledTimes(1)
+    expect(response.status).toEqual(200)
+    expect(response.body.data.success).toBe(true)
+    expect(response.body.message).toBeDefined()
+  })
+
+  test('Should return status 500 if profile status was not updated - status unverified', async () => {
+    mockedUpdateProfileStatus.mockResolvedValueOnce(mockedProfiles[0])
+    const response = await request(app).patch(
+      `/api/profile/${mockedProfiles[0].id}/status/verified`,
+    )
+    expect(mockedUpdateProfileStatus).toHaveBeenCalledWith(
+      mockedProfiles[0].id,
+      ProfileStatus.VERIFIED,
+    )
+    expect(mockedUpdateProfileStatus).toHaveBeenCalledTimes(1)
+    expect(response.status).toEqual(500)
+    expect(response.body.data.success).toBe(false)
+    expect(response.body.message).toBeDefined()
+  })
+
+  test('Should return status 500 if profile status was not updated - null', async () => {
+    mockedUpdateProfileStatus.mockResolvedValueOnce(null)
+    const response = await request(app).patch(
+      `/api/profile/${mockedProfiles[0].id}/status/verified`,
+    )
+    expect(mockedUpdateProfileStatus).toHaveBeenCalledWith(
+      mockedProfiles[0].id,
+      ProfileStatus.VERIFIED,
+    )
+    expect(mockedUpdateProfileStatus).toHaveBeenCalledTimes(1)
+    expect(response.status).toEqual(500)
+    expect(response.body.data.success).toBe(false)
+    expect(response.body.message).toBeDefined()
+  })
+
+  test('Should return status 500 if an error occurrs', async () => {
+    mockedUpdateProfileStatus.mockImplementationOnce(() => {
+      throw new Error('An error has occurred')
+    })
+    const response = await request(app).patch(
+      `/api/profile/${mockedProfiles[1].id}/status/verified`,
+    )
+    expect(mockedUpdateProfileStatus).toHaveBeenCalledWith(
+      mockedProfiles[1].id,
+      ProfileStatus.VERIFIED,
+    )
+    expect(mockedUpdateProfileStatus).toHaveBeenCalledTimes(1)
+    expect(response.status).toEqual(500)
+    expect(response.body.data.success).toBe(false)
+    expect(response.body.message).toBeDefined()
   })
 })
