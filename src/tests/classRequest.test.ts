@@ -153,6 +153,36 @@ describe('Post Class Request Test Suite', () => {
     expect(response.body.data).toBeUndefined()
   })
 
+  test('Should return status 500 if profile schedule status could not be updated - status available', async () => {
+    mockedFetchProfileById.mockResolvedValueOnce(mockedProfiles[0])
+    mockedSaveClassRequests.mockResolvedValueOnce([mockedClassRequest])
+    mockedUpdateProfileScheduleStatus.mockResolvedValueOnce(
+      mockedProfileSchedule,
+    )
+    const response = await request(app)
+      .post('/api/classRequest')
+      .send(mockedCreateClassRequestInputValid)
+    expect(mockedFetchProfileById).toHaveBeenCalledWith(
+      mockedCreateClassRequestInputValid.studentProfileId,
+    )
+    expect(mockedFetchProfileById).toHaveBeenCalledTimes(1)
+    expect(mockedSaveClassRequests).toHaveBeenCalledWith([
+      {
+        studentProfileId: mockedCreateClassRequestInputValid.studentProfileId,
+        profileScheduleId: mockedCreateClassRequestInputValid.profileScheduleId,
+      },
+    ])
+    expect(mockedSaveClassRequests).toHaveBeenCalledTimes(1)
+    expect(mockedUpdateProfileScheduleStatus).toHaveBeenCalledWith(
+      mockedCreateClassRequestInputValid.profileScheduleId,
+      ProfileScheduleStatus.UNAVAILABLE,
+    )
+    expect(mockedUpdateProfileScheduleStatus).toHaveBeenCalledTimes(1)
+    expect(response.status).toEqual(500)
+    expect(response.body.message).toBeDefined()
+    expect(response.body.data).toBeUndefined()
+  })
+
   test('Should return status 500 if an error occurs', async () => {
     mockedFetchProfileById.mockResolvedValueOnce(mockedProfiles[0])
     mockedSaveClassRequests.mockImplementationOnce(() => {
