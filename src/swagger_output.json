@@ -122,6 +122,261 @@
           }
         }
       }
+    },
+    "/profile": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/profile/{id}/status/verified": {
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/schedule": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "example": "any"
+                  },
+                  "profileId": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subject": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "profileId": {
+                    "example": "any"
+                  },
+                  "label": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/classRequest": {
+      "post": {
+        "tags": ["ClassRequest"],
+        "summary": "Create a new class request",
+        "description": "This endpoint will create a new class request for a given profile schedule and update the profile schedule status to UNAVAILABLE.",
+        "responses": {
+          "201": {
+            "description": "Successfully created a class request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createClassRequestSuccessfulResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Profile is not a STUDENT profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createClassRequestNotStudentProfileResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Profile not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createClassRequestProfileNotFoundResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Could not create class request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createClassRequestInternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createClassRequestBody"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "createClassRequestBody": {
+        "type": "object",
+        "properties": {
+          "studentProfileId": {
+            "type": "string",
+            "example": "6eb242f5-f76e-4097-89c7-5bc7127d9f6b"
+          },
+          "profileScheduleId": {
+            "type": "string",
+            "example": "aad8ffac-f2a6-457f-ad87-33ed287c924a"
+          }
+        },
+        "required": ["studentProfileId", "profileScheduleId"]
+      },
+      "createClassRequestSuccessfulResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Class Request"
+          },
+          "classRequest": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "31ab886c-d65b-485f-bf32-0a9fd6789fba"
+              },
+              "studentProfileId": {
+                "type": "string",
+                "example": "6eb242f5-f76e-4097-89c7-5bc7127d9f6b"
+              },
+              "profileScheduleId": {
+                "type": "string",
+                "example": "aad8ffac-f2a6-457f-ad87-33ed287c924a"
+              },
+              "createdAt": {
+                "type": "string",
+                "example": "2024-06-07T22:53:26.753803"
+              },
+              "updatedAt": {
+                "type": "string",
+                "example": "2024-10-05T22:53:26.753840"
+              },
+              "deletedAt": {
+                "type": "string",
+                "example": "2024-10-30T22:53:26.753851"
+              }
+            },
+            "required": ["id", "studentProfileId", "profileScheduleId"]
+          }
+        },
+        "required": ["message", "classRequest"]
+      },
+      "createClassRequestProfileNotFoundResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Profile not found"
+          }
+        },
+        "required": ["message"]
+      },
+      "createClassRequestNotStudentProfileResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Profile must have STUDENT role"
+          }
+        },
+        "required": ["message"]
+      },
+      "createClassRequestInternalServerErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Could not create class request"
+          }
+        },
+        "required": ["message"]
+      }
     }
   }
 }

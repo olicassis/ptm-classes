@@ -18,7 +18,7 @@ module.exports = {
         '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
         '@typescript-eslint/no-var-requires': 'error',
         'import/order': ['error', { 'newlines-between': 'always', 'alphabetize': { 'order': 'asc', 'caseInsensitive': true } }],
-        "max-len": ["error", { code: 120 }],
+        "max-len": ["error", { code: 120, ignoreComments: true }],
         'prettier/prettier': [
           'error',
           {

@@ -39,7 +39,7 @@ describe('Post Class Request Test Suite', () => {
     jest.clearAllMocks()
   })
 
-  test('Should return status 200 for a successful call to post classRequest', async () => {
+  test('Should return status 201 for a successful call to post classRequest', async () => {
     mockedFetchProfileById.mockResolvedValueOnce(mockedProfiles[0])
     mockedSaveClassRequests.mockResolvedValueOnce([mockedClassRequest])
     mockedUpdateProfileScheduleStatus.mockResolvedValueOnce({
@@ -66,7 +66,7 @@ describe('Post Class Request Test Suite', () => {
     )
     expect(mockedUpdateProfileScheduleStatus).toHaveBeenCalledTimes(1)
     expect(response.body.data).toMatchObject(mockedClassRequest)
-    expect(response.status).toEqual(200)
+    expect(response.status).toEqual(201)
     expect(response.body.message).toBeDefined()
   })
 
