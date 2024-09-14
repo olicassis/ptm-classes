@@ -261,7 +261,7 @@ describe('Post Profile Test Suite', () => {
     jest.clearAllMocks()
   })
 
-  test('Should return status 200 for a successful call to post profile', async () => {
+  test('Should return status 201 for a successful call to post profile', async () => {
     mockedSaveProfiles.mockResolvedValueOnce([mockedProfiles[0]])
     const response = await request(app)
       .post('/api/profile')
@@ -272,7 +272,7 @@ describe('Post Profile Test Suite', () => {
     expect(mockedSaveProfiles).toHaveBeenCalledTimes(1)
     expect(response.body.message).toBeDefined()
     expect(response.body.data).toEqual(mockedProfiles[0])
-    expect(response.status).toEqual(200)
+    expect(response.status).toEqual(201)
   })
 
   test('Should return status 500 if no profile is created', async () => {
@@ -328,7 +328,7 @@ describe('Verify Profile Test Suite', () => {
     jest.clearAllMocks()
   })
 
-  test('Should return status 200 for a successful call to verify profile status', async () => {
+  test('Should return status 204 for a successful call to verify profile status', async () => {
     mockedUpdateProfileStatus.mockResolvedValueOnce(mockedProfiles[1])
     const response = await request(app).patch(
       `/api/profile/${mockedProfiles[1].id}/status/verified`,
@@ -338,9 +338,7 @@ describe('Verify Profile Test Suite', () => {
       ProfileStatus.VERIFIED,
     )
     expect(mockedUpdateProfileStatus).toHaveBeenCalledTimes(1)
-    expect(response.status).toEqual(200)
-    expect(response.body.data.success).toBe(true)
-    expect(response.body.message).toBeDefined()
+    expect(response.status).toEqual(204)
   })
 
   test('Should return status 500 if profile status was not updated - status unverified', async () => {

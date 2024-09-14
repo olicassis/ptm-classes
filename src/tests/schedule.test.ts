@@ -47,7 +47,7 @@ describe('Post Schedule Test Suite', () => {
     jest.clearAllMocks()
   })
 
-  test('Should return status 200 for a successful call to post schedule', async () => {
+  test('Should return status 201 for a successful call to post schedule', async () => {
     mockedFetchProfileById.mockResolvedValueOnce(mockedProfiles[1])
     mockedFetchNonExpiredProfileSchedules.mockResolvedValueOnce([
       mockedNonOverlappingProfileSchedule,
@@ -81,7 +81,7 @@ describe('Post Schedule Test Suite', () => {
       ...mockedProfileSchedule,
       date: mockedProfileSchedule.date.toISOString(),
     })
-    expect(response.status).toEqual(200)
+    expect(response.status).toEqual(201)
     expect(response.body.message).toBeDefined()
   })
 

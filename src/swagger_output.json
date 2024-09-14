@@ -14,46 +14,96 @@
   "paths": {
     "/": {
       "get": {
-        "description": "",
+        "tags": ["Healthcheck"],
+        "summary": "Calls healthcheck",
+        "description": "This endpoint checks service health.",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Successfully called healthcheck",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/healthcheckSuccessfulResponse"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Could not create class request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/healthcheckInternalServerErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/healthcheck": {
       "get": {
-        "description": "",
+        "tags": ["Healthcheck"],
+        "summary": "Calls healthcheck",
+        "description": "This endpoint checks service health.",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Successfully called healthcheck",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/healthcheckSuccessfulResponse"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Could not create class request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/healthcheckInternalServerErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/profiles": {
       "get": {
-        "description": "",
+        "tags": ["Profiles"],
+        "summary": "Get all profiles",
+        "description": "This endpoint gets all profiles.",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Successfully got all profiles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getAllProfilesSuccessfulResponse"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Could not get profiles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getProfilesInternalServerErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/profile/{id}": {
       "get": {
-        "description": "",
+        "tags": ["Profile"],
+        "summary": "Get a profile",
+        "description": "This endpoint gets a profile by its id.",
         "parameters": [
           {
             "name": "id",
@@ -66,20 +116,36 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Successfully got a profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getProfileSuccessfulResponse"
+                }
+              }
+            }
           },
           "404": {
             "description": "Not Found"
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Could not get profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getProfileInternalServerErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/profile/{id}/subjects": {
       "get": {
-        "description": "",
+        "tags": ["ProfileSubjects"],
+        "summary": "Get all subjects for a given profile",
+        "description": "This endpoint gets all subjects for a given profile id.",
         "parameters": [
           {
             "name": "id",
@@ -92,17 +158,33 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Successfully got all profile subjects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getAllProfileSubjectsSuccessfulResponse"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Could not get profile subjects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getProfileSubjectsInternalServerErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/profile/{id}/schedules": {
       "get": {
-        "description": "",
+        "tags": ["ProfileSchedules"],
+        "summary": "Get all schedules for a given profile",
+        "description": "This endpoint gets all schedules for a given profile id.",
         "parameters": [
           {
             "name": "id",
@@ -115,30 +197,72 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Successfully got all profile schedules",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getAllProfileSchedulesSuccessfulResponse"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Could not get profile schedules",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getProfileSchedulesInternalServerErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/profile": {
       "post": {
-        "description": "",
+        "tags": ["Profile"],
+        "summary": "Create a new profile",
+        "description": "This endpoint will create a new profile.",
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Successfully created a profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createProfileSuccessfulResponse"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Could not create profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createProfileInternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createProfileRequestBody"
+              }
+            }
           }
         }
       }
     },
     "/profile/{id}/status/verified": {
       "patch": {
-        "description": "",
+        "tags": ["Profile"],
+        "summary": "Verify profile",
+        "description": "This endpoint updates profile status to VERIFIED.",
         "parameters": [
           {
             "name": "id",
@@ -150,45 +274,75 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "204": {
+            "description": "No Content"
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Could not verify profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/verifyProfileInternalServerErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/schedule": {
       "post": {
-        "description": "",
+        "tags": ["ProfileSchedule"],
+        "summary": "Create a new profile schedule",
+        "description": "This endpoint will create a new profile schedule for a given profile.",
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Successfully created a profile schedule",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createProfileScheduleSuccessfulResponse"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Forbidden"
+            "description": "A schedule date can't overlap",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/overlappingSchedulesResponse"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Not Found"
+            "description": "Profile not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/profileNotFoundResponse"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Could not create profile schedule",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createProfileScheduleInternalServerErrorResponse"
+                }
+              }
+            }
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "date": {
-                    "example": "any"
-                  },
-                  "profileId": {
-                    "example": "any"
-                  }
-                }
+                "$ref": "#/components/schemas/createScheduleRequestBody"
               }
             }
           }
@@ -197,34 +351,57 @@
     },
     "/subject": {
       "post": {
-        "description": "",
+        "tags": ["ProfileSubject"],
+        "summary": "Create a new profile subject",
+        "description": "This endpoint will create a new profile subject for a given profile.",
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Successfully created a profile subject",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createProfileSubjectSuccessfulResponse"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Profile is not a TEACHER profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/notTeacherProfileResponse"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Not Found"
+            "description": "Profile not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/profileNotFoundResponse"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Could not create profile subject",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createProfileSubjectInternalServerErrorResponse"
+                }
+              }
+            }
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "profileId": {
-                    "example": "any"
-                  },
-                  "label": {
-                    "example": "any"
-                  }
-                }
+                "$ref": "#/components/schemas/createSubjectRequestBody"
               }
             }
           }
@@ -252,7 +429,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/createClassRequestNotStudentProfileResponse"
+                  "$ref": "#/components/schemas/notStudentProfileResponse"
                 }
               }
             }
@@ -262,7 +439,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/createClassRequestProfileNotFoundResponse"
+                  "$ref": "#/components/schemas/profileNotFoundResponse"
                 }
               }
             }
@@ -314,7 +491,7 @@
             "type": "string",
             "example": "Class Request"
           },
-          "classRequest": {
+          "data": {
             "type": "object",
             "properties": {
               "id": {
@@ -345,9 +522,9 @@
             "required": ["id", "studentProfileId", "profileScheduleId"]
           }
         },
-        "required": ["message", "classRequest"]
+        "required": ["message", "data"]
       },
-      "createClassRequestProfileNotFoundResponse": {
+      "profileNotFoundResponse": {
         "type": "object",
         "properties": {
           "message": {
@@ -357,12 +534,22 @@
         },
         "required": ["message"]
       },
-      "createClassRequestNotStudentProfileResponse": {
+      "notStudentProfileResponse": {
         "type": "object",
         "properties": {
           "message": {
             "type": "string",
             "example": "Profile must have STUDENT role"
+          }
+        },
+        "required": ["message"]
+      },
+      "notTeacherProfileResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Profile must have TEACHER role"
           }
         },
         "required": ["message"]
@@ -376,6 +563,559 @@
           }
         },
         "required": ["message"]
+      },
+      "healthcheckSuccessfulResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "App is fine!"
+          }
+        },
+        "required": ["message"]
+      },
+      "healthcheckInternalServerErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Internal Server Error"
+          }
+        },
+        "required": ["message"]
+      },
+      "scheduleDateMustBeInTheFutureResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "A schedule date must be in the future"
+          }
+        },
+        "required": ["message"]
+      },
+      "overlappingSchedulesResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Could not create schedule! Provided date overlaps with existing schedules"
+          }
+        },
+        "required": ["message"]
+      },
+      "createScheduleRequestBody": {
+        "type": "object",
+        "properties": {
+          "profileId": {
+            "type": "string",
+            "example": "cf233a74-a26c-45bc-915f-a6363dd1ecd2"
+          },
+          "date": {
+            "type": "string",
+            "example": "2024-10-27T22:53:26.753851"
+          }
+        },
+        "required": ["profileId", "date"]
+      },
+      "createProfileScheduleSuccessfulResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Profile Schedule"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "065fc17e-e0ce-43cb-929c-932f52a86cff"
+              },
+              "profileId": {
+                "type": "string",
+                "example": "cf233a74-a26c-45bc-915f-a6363dd1ecd2"
+              },
+              "date": {
+                "type": "string",
+                "example": "2024-10-27T22:53:26.753851"
+              },
+              "status": {
+                "type": "string",
+                "example": "available"
+              },
+              "createdAt": {
+                "type": "string",
+                "example": "2024-06-13T22:53:26.753803"
+              },
+              "updatedAt": {
+                "type": "string",
+                "example": "2024-10-21T22:53:26.753840"
+              },
+              "deletedAt": {
+                "type": "string",
+                "example": "2024-10-28T22:53:26.753851"
+              }
+            },
+            "required": ["id", "profileId", "date", "status"]
+          }
+        },
+        "required": ["message", "data"]
+      },
+      "createProfileScheduleInternalServerErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Could not create schedule"
+          }
+        },
+        "required": ["message"]
+      },
+      "createSubjectRequestBody": {
+        "type": "object",
+        "properties": {
+          "profileId": {
+            "type": "string",
+            "example": "cf233a74-a26c-45bc-915f-a6363dd1ecd2"
+          },
+          "label": {
+            "type": "string",
+            "example": "math"
+          }
+        },
+        "required": ["profileId", "label"]
+      },
+      "createProfileSubjectSuccessfulResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Profile Subject"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "1d858051-27fc-40cd-bc5d-79871610483b"
+              },
+              "profileId": {
+                "type": "string",
+                "example": "cf233a74-a26c-45bc-915f-a6363dd1ecd2"
+              },
+              "label": {
+                "type": "string",
+                "example": "math"
+              },
+              "createdAt": {
+                "type": "string",
+                "example": "2024-06-12T22:53:26.753803"
+              },
+              "updatedAt": {
+                "type": "string",
+                "example": "2024-10-20T22:53:26.753840"
+              },
+              "deletedAt": {
+                "type": "string",
+                "example": "2024-10-27T22:53:26.753851"
+              }
+            },
+            "required": ["id", "profileId", "label"]
+          }
+        },
+        "required": ["message", "data"]
+      },
+      "createProfileSubjectInternalServerErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Could not create subject"
+          }
+        },
+        "required": ["message"]
+      },
+      "getAllProfilesSuccessfulResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Profiles"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "9771c7d9-9ee7-418e-bf27-5d6d35dc7ccb"
+                },
+                "firstName": {
+                  "type": "string",
+                  "example": "Kelvin"
+                },
+                "lastName": {
+                  "type": "string",
+                  "example": "Green"
+                },
+                "avatar": {
+                  "type": "string",
+                  "example": "https://avatars.dicebear.com/api/bottts/example.svg"
+                },
+                "username": {
+                  "type": "string",
+                  "example": "kgreen"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "teacher"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "verified"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "example": "2024-08-12T22:53:26.753803"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "example": "2024-09-20T22:53:26.753840"
+                },
+                "deletedAt": {
+                  "type": "string",
+                  "example": "2024-12-27T22:53:26.753851"
+                }
+              },
+              "required": [
+                "id",
+                "firstName",
+                "lastName",
+                "avatar",
+                "username",
+                "role",
+                "status"
+              ]
+            }
+          }
+        },
+        "required": ["message", "data"]
+      },
+      "getProfilesInternalServerErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Could not get profiles"
+          }
+        },
+        "required": ["message"]
+      },
+      "getProfileSuccessfulResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Profile"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "9771c7d9-9ee7-418e-bf27-5d6d35dc7ccb"
+              },
+              "firstName": {
+                "type": "string",
+                "example": "Kelvin"
+              },
+              "lastName": {
+                "type": "string",
+                "example": "Green"
+              },
+              "avatar": {
+                "type": "string",
+                "example": "https://avatars.dicebear.com/api/bottts/example.svg"
+              },
+              "username": {
+                "type": "string",
+                "example": "kgreen"
+              },
+              "role": {
+                "type": "string",
+                "example": "teacher"
+              },
+              "status": {
+                "type": "string",
+                "example": "verified"
+              },
+              "createdAt": {
+                "type": "string",
+                "example": "2024-08-12T22:53:26.753803"
+              },
+              "updatedAt": {
+                "type": "string",
+                "example": "2024-09-20T22:53:26.753840"
+              },
+              "deletedAt": {
+                "type": "string",
+                "example": "2024-12-27T22:53:26.753851"
+              }
+            },
+            "required": [
+              "id",
+              "firstName",
+              "lastName",
+              "avatar",
+              "username",
+              "role",
+              "status"
+            ]
+          }
+        },
+        "required": ["message", "data"]
+      },
+      "getProfileInternalServerErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Could not get profile"
+          }
+        },
+        "required": ["message"]
+      },
+      "getAllProfileSubjectsSuccessfulResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Profile Subjects"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "1d858051-27fc-40cd-bc5d-79871610483b"
+                },
+                "profileId": {
+                  "type": "string",
+                  "example": "cf233a74-a26c-45bc-915f-a6363dd1ecd2"
+                },
+                "label": {
+                  "type": "string",
+                  "example": "math"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "example": "2024-06-12T22:53:26.753803"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "example": "2024-10-20T22:53:26.753840"
+                },
+                "deletedAt": {
+                  "type": "string",
+                  "example": "2024-10-27T22:53:26.753851"
+                }
+              },
+              "required": ["id", "profileId", "label"]
+            }
+          }
+        },
+        "required": ["message", "data"]
+      },
+      "getProfileSubjectsInternalServerErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Could not get profile subjects"
+          }
+        },
+        "required": ["message"]
+      },
+      "getAllProfileSchedulesSuccessfulResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Profile Schedules"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "065fc17e-e0ce-43cb-929c-932f52a86cff"
+                },
+                "profileId": {
+                  "type": "string",
+                  "example": "cf233a74-a26c-45bc-915f-a6363dd1ecd2"
+                },
+                "date": {
+                  "type": "string",
+                  "example": "2024-10-27T22:53:26.753851"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "available"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "example": "2024-06-13T22:53:26.753803"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "example": "2024-10-21T22:53:26.753840"
+                },
+                "deletedAt": {
+                  "type": "string",
+                  "example": "2024-10-28T22:53:26.753851"
+                }
+              },
+              "required": ["id", "profileId", "date", "status"]
+            }
+          }
+        },
+        "required": ["message", "data"]
+      },
+      "getProfileSchedulesInternalServerErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Could not get profile schedules"
+          }
+        },
+        "required": ["message"]
+      },
+      "createProfileRequestBody": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "example": "Kelvin"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Green"
+          },
+          "avatar": {
+            "type": "string",
+            "example": "https://avatars.dicebear.com/api/bottts/example.svg"
+          },
+          "username": {
+            "type": "string",
+            "example": "kgreen"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["teacher", "student"]
+          }
+        },
+        "required": ["firstName", "lastName", "username"]
+      },
+      "createProfileSuccessfulResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Profile"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "9771c7d9-9ee7-418e-bf27-5d6d35dc7ccb"
+              },
+              "firstName": {
+                "type": "string",
+                "example": "Kelvin"
+              },
+              "lastName": {
+                "type": "string",
+                "example": "Green"
+              },
+              "avatar": {
+                "type": "string",
+                "example": "https://avatars.dicebear.com/api/bottts/example.svg"
+              },
+              "username": {
+                "type": "string",
+                "example": "kgreen"
+              },
+              "role": {
+                "type": "string",
+                "example": "teacher"
+              },
+              "status": {
+                "type": "string",
+                "example": "verified"
+              },
+              "createdAt": {
+                "type": "string",
+                "example": "2024-08-12T22:53:26.753803"
+              },
+              "updatedAt": {
+                "type": "string",
+                "example": "2024-09-20T22:53:26.753840"
+              },
+              "deletedAt": {
+                "type": "string",
+                "example": "2024-12-27T22:53:26.753851"
+              }
+            },
+            "required": [
+              "id",
+              "firstName",
+              "lastName",
+              "avatar",
+              "username",
+              "role",
+              "status"
+            ]
+          }
+        },
+        "required": ["message", "data"]
+      },
+      "createProfileInternalServerErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Could not create profile"
+          }
+        },
+        "required": ["message"]
+      },
+      "verifyProfileInternalServerErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Cound not verify profile"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "success": {
+                "type": "boolean",
+                "example": false
+              }
+            },
+            "required": ["success"]
+          }
+        },
+        "required": ["message", "data"]
       }
     }
   }

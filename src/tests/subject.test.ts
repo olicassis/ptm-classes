@@ -29,7 +29,7 @@ describe('Post Subject Test Suite', () => {
     jest.clearAllMocks()
   })
 
-  test('Should return status 200 for a successful call to post subject', async () => {
+  test('Should return status 201 for a successful call to post subject', async () => {
     mockedFetchProfileById.mockResolvedValueOnce(mockedProfiles[1])
     mockedSaveSubjects.mockResolvedValueOnce([mockedProfileSubject])
     const response = await request(app)
@@ -47,7 +47,7 @@ describe('Post Subject Test Suite', () => {
     ])
     expect(mockedSaveSubjects).toHaveBeenCalledTimes(1)
     expect(response.body.data).toMatchObject(mockedProfileSubject)
-    expect(response.status).toEqual(200)
+    expect(response.status).toEqual(201)
     expect(response.body.message).toBeDefined()
   })
 

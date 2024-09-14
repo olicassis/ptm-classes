@@ -28,7 +28,7 @@ export async function createClassRequestController(
         content: {
           "application/json": {
             schema: {
-                $ref: "#/components/schemas/createClassRequestBody"
+              $ref: "#/components/schemas/createClassRequestBody"
             }  
           }
         }
@@ -43,7 +43,7 @@ export async function createClassRequestController(
         content: {
           "application/json": {
             schema:{
-                $ref: "#/components/schemas/createClassRequestProfileNotFoundResponse"
+              $ref: "#/components/schemas/profileNotFoundResponse"
             }
           }           
         }
@@ -59,7 +59,7 @@ export async function createClassRequestController(
         content: {
           "application/json": {
             schema:{
-                $ref: "#/components/schemas/createClassRequestNotStudentProfileResponse"
+              $ref: "#/components/schemas/notStudentProfileResponse"
             }
           }           
         }
@@ -98,7 +98,7 @@ export async function createClassRequestController(
         content: {
           "application/json": {
             schema:{
-                $ref: "#/components/schemas/createClassRequestSuccessfulResponse"
+              $ref: "#/components/schemas/createClassRequestSuccessfulResponse"
             }
           }           
         }
@@ -115,7 +115,7 @@ export async function createClassRequestController(
         content: {
           "application/json": {
             schema:{
-                $ref: "#/components/schemas/createClassRequestInternalServerErrorResponse"
+              $ref: "#/components/schemas/createClassRequestInternalServerErrorResponse"
             }
           }           
         }
