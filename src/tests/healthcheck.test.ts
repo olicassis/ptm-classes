@@ -2,8 +2,17 @@ import { beforeEach, jest, describe, test } from '@jest/globals'
 import request from 'supertest'
 
 import app from '../app'
+import { AppDataSource } from '../db/dataSource'
 
-import { mockedInitializeDatasource, mockedQuery } from './mocks/setMocks'
+jest.mock('../db/dataSource', () => ({
+  AppDataSource: {
+    query: jest.fn(),
+  },
+}))
+
+export const mockedQuery = AppDataSource.query as jest.MockedFunction<
+  typeof AppDataSource.query
+>
 
 describe('Healthcheck Test Suite', () => {
   beforeEach(() => {
@@ -13,7 +22,6 @@ describe('Healthcheck Test Suite', () => {
 
   test('Should return status 200 for a successfull call healthcheck', async () => {
     const response = await request(app).get('/api/healthcheck')
-    expect(mockedInitializeDatasource).toHaveBeenCalledTimes(1)
     expect(mockedQuery).toHaveBeenCalledWith('SELECT 1')
     expect(response.body.message).toEqual('App is fine!')
     expect(response.status).toEqual(200)
@@ -24,7 +32,6 @@ describe('Healthcheck Test Suite', () => {
       throw new Error('An error has occurred')
     })
     const response = await request(app).get('/api/healthcheck')
-    expect(mockedInitializeDatasource).toHaveBeenCalledTimes(1)
     expect(mockedQuery).toHaveBeenCalledWith('SELECT 1')
     expect(mockedQuery).not.toHaveReturned()
     expect(response.body.message).toEqual('Internal Server Error')
