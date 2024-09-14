@@ -21,8 +21,18 @@ export class Profile1721687853560 implements MigrationInterface {
           type: 'varchar',
           isUnique: true,
         },
-        { name: 'role', type: 'varchar', isNullable: true },
-        { name: 'status', type: 'varchar' },
+        {
+          name: 'role',
+          type: 'enum',
+          enum: ['student', 'teacher'],
+          isNullable: true,
+        },
+        {
+          name: 'status',
+          type: 'enum',
+          enum: ['unverified', 'verified'],
+          default: `'unverified'`,
+        },
         { name: 'created_at', type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
         {
           name: 'updated_at',

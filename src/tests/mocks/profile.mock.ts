@@ -7,6 +7,7 @@ import {
   ProfileScheduleStatus,
   ProfileStatus,
 } from '../../enums/profile'
+import { CreateProfileRequest } from '../../middlewares/validators/profile'
 
 const mockedStudentProfile = new ProfileEntity()
 mockedStudentProfile.id = '3a5ada5e-940f-439a-b333-bb4d48159cd9'
@@ -47,3 +48,16 @@ export const mockedProfiles: ProfileEntity[] = [
   mockedStudentProfile,
   mockedTeacherProfile,
 ]
+
+export const mockedCreateProfileInputValid: CreateProfileRequest = {
+  firstName: mockedStudentProfile.firstName,
+  lastName: mockedStudentProfile.lastName,
+  username: mockedStudentProfile.username,
+  avatar: mockedStudentProfile.avatar,
+  role: ProfileRole.STUDENT,
+}
+
+export const mockedCreateProfileInputInvalid = {
+  firstName: 'Test',
+  lastName: 'Invalid',
+} as Partial<CreateProfileRequest>
